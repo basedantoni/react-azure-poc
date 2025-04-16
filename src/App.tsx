@@ -17,24 +17,24 @@ import {
 const queryClient = new QueryClient();
 
 type Request = {
-  Id: string;
-  user_id: string;
+  id: string;
+  userId: string;
   title: string;
   description: string;
   status: string;
-  created_at: string;
-  updated_at: string;
+  createdAt: string;
+  updatedAt: string;
 };
 
 const columnHelper = createColumnHelper<Request>();
 
 const columns = [
-  columnHelper.accessor('Id', {
+  columnHelper.accessor('id', {
     header: 'ID',
     cell: (info) => info.getValue(),
     footer: (info) => info.column.id,
   }),
-  columnHelper.accessor('user_id', {
+  columnHelper.accessor('userId', {
     header: 'User ID',
     cell: (info) => info.getValue(),
     footer: (info) => info.column.id,
@@ -49,7 +49,7 @@ const columns = [
     cell: (info) => info.getValue(),
     footer: (info) => info.column.id,
   }),
-  columnHelper.accessor('updated_at', {
+  columnHelper.accessor('updatedAt', {
     header: 'Updated At',
     cell: (info) => info.getValue(),
     footer: (info) => info.column.id,
