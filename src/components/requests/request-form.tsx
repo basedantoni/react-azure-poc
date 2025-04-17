@@ -57,7 +57,7 @@ export function RequestForm({ closeModal, request }: RequestFormProps) {
     queryFn: () => getUsers(),
   });
 
-  const { mutate: createRequestMutation, isPending: isCreating } = useMutation({
+  const { mutate: createRequestMutation } = useMutation({
     mutationFn: (request: NewRequest) => createRequest(request),
     onSuccess: () => {
       closeModal();
@@ -65,7 +65,7 @@ export function RequestForm({ closeModal, request }: RequestFormProps) {
     },
   });
 
-  const { mutate: updateRequestMutation, isPending: isUpdating } = useMutation({
+  const { mutate: updateRequestMutation } = useMutation({
     mutationFn: (request: Request) => updateRequest(request),
     onSuccess: () => {
       closeModal();
