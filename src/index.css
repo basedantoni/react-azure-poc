@@ -4,8 +4,6 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -123,5 +121,11 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+  h1 {
+    @apply text-xl sm:text-4xl font-bold;
+  }
+  h2 {
+    @apply sm:text-xl;
   }
 }
