@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const step1Schema = z.object({
   lastName: z.string().min(1),
-  EIN: z.string().min(10),
+  ein: z.string().min(10),
   park: z.enum(['Carowinds', 'Six Flags', 'Fiesta Texas']),
 });
 

@@ -7,6 +7,8 @@ import { Step4 } from './step-4';
 import { StepIndicator } from './step-indicator';
 
 import { Button } from './ui/button';
+import { Form } from './ui/form';
+
 import {
   FormSchema,
   FormValues,
@@ -15,16 +17,17 @@ import {
   step3Schema,
   step4Schema,
 } from '@/schema';
+
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Form } from './ui/form';
+import { ArrowLeftIcon } from 'lucide-react';
 
 export function MultiStepForm() {
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       lastName: '',
-      EIN: '',
+      ein: '',
       park: 'Fiesta Texas',
       name: '',
       jobNumber: '',
@@ -41,7 +44,7 @@ export function MultiStepForm() {
   const allSteps = [
     {
       label: 'Welcome to the Zachry Picnic',
-      component: <Step1 />,
+      component: <Step1 form={form} />,
     },
     {
       label: 'Order Details',
@@ -94,31 +97,47 @@ export function MultiStepForm() {
   };
 
   return (
-    <div>
-      <Button variant='link' onClick={handlePrevious} disabled={isFirstStep}>
-        Back
-      </Button>
+    <div className='flex flex-col w-full items-center justify-center space-y-4'>
+      {!isFirstStep && (
+        <Button
+          className='self-start'
+          variant='link'
+          onClick={handlePrevious}
+          disabled={isFirstStep}
+        >
+          <ArrowLeftIcon className='w-4 h-4' />
+          Back
+        </Button>
+      )}
+
       <StepIndicator current={currentStep} steps={steps} />
+
       <h1>{steps[currentStep].label}</h1>
+
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)}>
+        <form
+          onSubmit={form.handleSubmit(handleSubmit)}
+          className='space-y-4 w-96'
+        >
           {steps[currentStep].component}
         </form>
       </Form>
-      {currentStep === 1 && (
-        <Button
-          variant='secondary'
-          onClick={() => {
-            setIncludeStep3(true);
-            handleNext();
-          }}
-        >
-          Purchase Add'tl Tickets
+      <div className='flex self-end gap-2.5'>
+        {currentStep === 1 && (
+          <Button
+            variant='secondary'
+            onClick={() => {
+              setIncludeStep3(true);
+              handleNext();
+            }}
+          >
+            Purchase Add'tl Tickets
+          </Button>
+        )}
+        <Button onClick={handleNext} disabled={isLastStep}>
+          Next
         </Button>
-      )}
-      <Button onClick={handleNext} disabled={isLastStep}>
-        Next
-      </Button>
+      </div>
     </div>
   );
 }
