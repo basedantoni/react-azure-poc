@@ -13,6 +13,7 @@ import {
   QueryClientProvider,
   useQuery,
 } from '@tanstack/react-query';
+import { Button } from './components/ui/button';
 
 const queryClient = new QueryClient();
 
@@ -124,6 +125,7 @@ function Requests() {
           ))}
         </tbody>
       </table>
+      <Button variant='secondary'>Howdy</Button>
     </div>
   );
 }
