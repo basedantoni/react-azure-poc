@@ -98,9 +98,9 @@ export function MultiStepForm() {
 
   return (
     <div className='flex flex-col w-full items-center justify-center space-y-4'>
-      {!isFirstStep && (
+      {!isFirstStep ? (
         <Button
-          className='self-start'
+          className='mt-3 self-start'
           variant='link'
           onClick={handlePrevious}
           disabled={isFirstStep}
@@ -108,6 +108,8 @@ export function MultiStepForm() {
           <ArrowLeftIcon className='w-4 h-4' />
           Back
         </Button>
+      ) : (
+        <div className='h-12' />
       )}
 
       <StepIndicator current={currentStep} steps={steps} />
