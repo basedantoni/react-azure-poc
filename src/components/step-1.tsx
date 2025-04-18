@@ -42,19 +42,19 @@ export function Step1({ form }: { form: UseFormReturn<FormValues> }) {
                 onValueChange={field.onChange}
                 defaultValue={field.value}
               >
-                <FormItem>
+                <FormItem className='flex gap-2'>
                   <FormControl>
                     <RadioGroupItem value='Fiesta Texas' />
                   </FormControl>
                   <FormLabel>Fiesta Texas</FormLabel>
                 </FormItem>
-                <FormItem>
+                <FormItem className='flex gap-2'>
                   <FormControl>
                     <RadioGroupItem value='Six Flags' />
                   </FormControl>
                   <FormLabel>Six Flags</FormLabel>
                 </FormItem>
-                <FormItem>
+                <FormItem className='flex gap-2'>
                   <FormControl>
                     <RadioGroupItem value='Carowinds' />
                   </FormControl>

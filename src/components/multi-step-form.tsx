@@ -48,15 +48,15 @@ export function MultiStepForm() {
     },
     {
       label: 'Order Details',
-      component: <Step2 />,
+      component: <Step2 form={form} />,
     },
     {
       label: 'Purchase Additional Tickets',
-      component: <Step3 />,
+      component: <Step3 form={form} />,
     },
     {
       label: 'Order Summary',
-      component: <Step4 />,
+      component: <Step4 form={form} />,
     },
   ];
 
@@ -117,7 +117,7 @@ export function MultiStepForm() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
-          className='space-y-4 w-96'
+          className='space-y-8 w-96'
         >
           {steps[currentStep].component}
         </form>
