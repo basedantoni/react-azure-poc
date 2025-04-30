@@ -21,8 +21,10 @@ import {
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowLeftIcon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export function MultiStepForm() {
+  const { t } = useTranslation();
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -43,19 +45,19 @@ export function MultiStepForm() {
 
   const allSteps = [
     {
-      label: 'Welcome to the Zachry Picnic',
+      label: t('welcome'),
       component: <Step1 form={form} />,
     },
     {
-      label: 'Order Details',
+      label: t('orderDetails'),
       component: <Step2 form={form} />,
     },
     {
-      label: 'Purchase Additional Tickets',
+      label: t('purchaseAdditionalTickets'),
       component: <Step3 form={form} />,
     },
     {
-      label: 'Order Summary',
+      label: t('orderSummary'),
       component: <Step4 form={form} />,
     },
   ];
@@ -97,7 +99,7 @@ export function MultiStepForm() {
   };
 
   return (
-    <div className='flex flex-col w-full items-center justify-center space-y-4'>
+    <div className='flex flex-col w-full max-w-96 text-center items-center justify-center space-y-4'>
       {!isFirstStep ? (
         <Button
           className='mt-3 self-start'
