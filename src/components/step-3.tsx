@@ -1,8 +1,6 @@
-import { FormField } from './ui/form';
+import { Button } from './ui/button';
+import { Form, FormField } from './ui/form';
 import { Input } from './ui/input';
-
-import { UseFormReturn } from 'react-hook-form';
-import { FormValues } from '@/schema';
 import {
   Table,
   TableHead,
@@ -13,53 +11,78 @@ import {
   TableFooter,
 } from './ui/table';
 
-export function Step3({ form }: { form: UseFormReturn<FormValues> }) {
+import { useForm } from 'react-hook-form';
+import { useFormStepper } from '@/hooks/form';
+import { step3Schema } from '@/schema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+
+type Step3Values = z.infer<typeof step3Schema>;
+
+export function Step3() {
+  const { incrementCurrentStep } = useFormStepper();
+
+  const form = useForm<Step3Values>({
+    resolver: zodResolver(step3Schema),
+    defaultValues: {
+      fullTicketQuantity: 0,
+      mealTicketQuantity: 0,
+    },
+  });
+  const onSubmit = (data: Step3Values) => {
+    console.log(data);
+    incrementCurrentStep();
+  };
+
   return (
-    <>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Type of Ticket</TableHead>
-            <TableHead>Quantity</TableHead>
-            <TableHead>Price</TableHead>
-            <TableHead>Amount Due</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <TableRow>
-            <TableCell>Full Ticket (meal ticket included)</TableCell>
-            <TableCell>
-              <FormField
-                control={form.control}
-                name='fullTicketQuantity'
-                render={({ field }) => <Input type='number' {...field} />}
-              />
-            </TableCell>
-            <TableCell>$0</TableCell>
-            <TableCell>$0</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Meal Ticket</TableCell>
-            <TableCell>
-              <FormField
-                control={form.control}
-                name='mealTicketQuantity'
-                render={({ field }) => <Input type='number' {...field} />}
-              />
-            </TableCell>
-            <TableCell>$0</TableCell>
-            <TableCell>$0</TableCell>
-          </TableRow>
-        </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TableCell>Total</TableCell>
-            <TableCell></TableCell>
-            <TableCell></TableCell>
-            <TableCell>$0</TableCell>
-          </TableRow>
-        </TableFooter>
-      </Table>
-    </>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Type of Ticket</TableHead>
+              <TableHead>Quantity</TableHead>
+              <TableHead>Price</TableHead>
+              <TableHead>Amount Due</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell>Full Ticket (meal ticket included)</TableCell>
+              <TableCell>
+                <FormField
+                  control={form.control}
+                  name='fullTicketQuantity'
+                  render={({ field }) => <Input type='number' {...field} />}
+                />
+              </TableCell>
+              <TableCell>$0</TableCell>
+              <TableCell>$0</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Meal Ticket</TableCell>
+              <TableCell>
+                <FormField
+                  control={form.control}
+                  name='mealTicketQuantity'
+                  render={({ field }) => <Input type='number' {...field} />}
+                />
+              </TableCell>
+              <TableCell>$0</TableCell>
+              <TableCell>$0</TableCell>
+            </TableRow>
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TableCell>Total</TableCell>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
+              <TableCell>$0</TableCell>
+            </TableRow>
+          </TableFooter>
+        </Table>
+        <Button type='submit'>Next</Button>
+      </form>
+    </Form>
   );
 }

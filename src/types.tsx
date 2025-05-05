@@ -1,22 +1,25 @@
-export type Request = {
-  id: string;
-  userId: string;
-  title: string;
-  description: string;
-  status: string;
-  createdAt: string;
-  updatedAt: string;
-};
-
-export type NewRequest = Omit<
-  Request,
-  'id' | 'description' | 'createdAt' | 'updatedAt'
->;
-
 export type User = {
   id: string;
+  lastName: string;
+  firstName?: string;
+  ein: number;
+  jobNumber?: string;
   email: string;
-  role: string;
-  createdAt: string;
-  updatedAt: string;
+  children: number;
+  guest: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  submissions?: Submission[];
+};
+
+export type Submission = {
+  id: string;
+  park: string;
+  fullTicket: number;
+  mealTicket: number;
+  payrollDeduction: boolean;
+  deductionPeriod: number;
+  createdAt?: string;
+  updatedAt?: string;
+  userId: string;
 };
