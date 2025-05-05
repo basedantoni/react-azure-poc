@@ -6,10 +6,15 @@ interface FormStepper {
   setCurrentStep: (step: number) => void;
   incrementCurrentStep: () => void;
   decrementCurrentStep: () => void;
-  includeStep3: boolean;
-  setIncludeStep3: (include: boolean) => void;
+
+  includePayrollDeduction: boolean;
+  setIncludePayrollDeduction: (include: boolean) => void;
+
   user: User;
   setUser: (user: User) => void;
+
+  payrollDeductionAmount: number;
+  setPayrollDeductionAmount: (amount: number) => void;
 }
 
 export const useFormStepper = create<FormStepper>()((set) => ({
@@ -19,8 +24,9 @@ export const useFormStepper = create<FormStepper>()((set) => ({
     set((state) => ({ currentStep: state.currentStep + 1 })),
   decrementCurrentStep: () =>
     set((state) => ({ currentStep: state.currentStep - 1 })),
-  includeStep3: false,
-  setIncludeStep3: (include: boolean) => set({ includeStep3: include }),
+  includePayrollDeduction: false,
+  setIncludePayrollDeduction: (include: boolean) =>
+    set({ includePayrollDeduction: include }),
   user: {
     id: '',
     ein: 0,
@@ -34,4 +40,7 @@ export const useFormStepper = create<FormStepper>()((set) => ({
     updatedAt: '',
   },
   setUser: (user: User) => set({ user }),
+  payrollDeductionAmount: 0,
+  setPayrollDeductionAmount: (amount: number) =>
+    set({ payrollDeductionAmount: amount }),
 }));

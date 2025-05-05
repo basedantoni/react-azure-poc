@@ -1,4 +1,3 @@
-import { junit } from 'node:test/reporters';
 import { z } from 'zod';
 
 export const EmployeeSchema = z.object({

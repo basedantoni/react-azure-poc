@@ -122,9 +122,11 @@ export function Step1() {
             </FormItem>
           )}
         />
-        <Button className='cursor-pointer' type='submit'>
-          Next
-        </Button>
+        <div className='flex justify-end gap-2'>
+          <Button className='cursor-pointer' type='submit'>
+            Next
+          </Button>
+        </div>
       </form>
     </Form>
   );

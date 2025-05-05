@@ -18,7 +18,8 @@ import { z } from 'zod';
 type Step2Values = z.infer<typeof step2Schema>;
 
 export function Step2() {
-  const { incrementCurrentStep, setIncludeStep3, user } = useFormStepper();
+  const { incrementCurrentStep, setIncludePayrollDeduction, user } =
+    useFormStepper();
 
   const form = useForm<Step2Values>({
     resolver: zodResolver(step2Schema),
@@ -32,17 +33,17 @@ export function Step2() {
     },
   });
 
-  const handleSubmit = (data: Step2Values) => {
+  const handleSubmit = () => {
     incrementCurrentStep();
   };
 
-  const handlePurchaseTickets = (data: Step2Values) => {
-    setIncludeStep3(true);
+  const handlePurchaseTickets = () => {
+    setIncludePayrollDeduction(true);
     incrementCurrentStep();
   };
 
   return (
-    <>
+    <div className='flex flex-col space-y-8'>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className='space-y-8'>
           <FormField
@@ -53,6 +54,7 @@ export function Step2() {
                 <FormLabel>Name</FormLabel>
                 <FormControl>
                   <Input
+                    readOnly
                     {...field}
                     placeholder='Name'
                     value={`${user?.firstName} ${user?.lastName}`}
@@ -70,7 +72,7 @@ export function Step2() {
                 <FormLabel>Job Number</FormLabel>
                 <FormControl>
                   <Input
-                    disabled
+                    readOnly
                     {...field}
                     placeholder='Job Number'
                     value={user?.jobNumber ?? ''}
@@ -87,7 +89,12 @@ export function Step2() {
               <FormItem>
                 <FormLabel>Location</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder='Location' />
+                  <Input
+                    readOnly
+                    {...field}
+                    placeholder='Location'
+                    value={user?.jobNumber ?? ''}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -112,7 +119,7 @@ export function Step2() {
                   <FormLabel>Employee</FormLabel>
                   <FormControl>
                     <Input
-                      disabled
+                      readOnly
                       className='w-16'
                       {...field}
                       value={1}
@@ -132,18 +139,29 @@ export function Step2() {
                 <FormItem className='flex justify-between'>
                   <FormLabel>
                     Spouse/Guest{' '}
-                    <span className='text-xs text-gray-500'>(max 1)</span>
+                    <span
+                      className={`${
+                        form.formState.errors.guestTickets
+                          ? 'text-red-500'
+                          : 'text-gray-500'
+                      } text-xs`}
+                    >
+                      (max 1)
+                    </span>
                   </FormLabel>
-                  <FormControl>
-                    <Input
-                      className='w-16'
-                      {...field}
-                      type='number'
-                      min={0}
-                      max={1}
-                    />
-                  </FormControl>
-                  <FormMessage />
+                  <div className='flex items-end flex-col gap-2'>
+                    <FormControl>
+                      <Input
+                        className='w-16'
+                        {...field}
+                        type='number'
+                        min={0}
+                        max={1}
+                        onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />
@@ -155,7 +173,7 @@ export function Step2() {
                   <FormLabel>Children</FormLabel>
                   <FormControl>
                     <Input
-                      disabled
+                      readOnly
                       className='w-16'
                       {...field}
                       type='number'
@@ -171,18 +189,20 @@ export function Step2() {
           </div>
         </form>
       </Form>
-      <Button
-        variant='secondary'
-        onClick={form.handleSubmit(handlePurchaseTickets)}
-      >
-        Purchase Add'tl Tickets
-      </Button>
-      <Button
-        className='cursor-pointer'
-        onClick={form.handleSubmit(handleSubmit)}
-      >
-        Next
-      </Button>
-    </>
+      <div className='flex w-full justify-end gap-2'>
+        <Button
+          variant='secondary'
+          onClick={form.handleSubmit(handlePurchaseTickets)}
+        >
+          Purchase Add'tl Tickets
+        </Button>
+        <Button
+          className='cursor-pointer'
+          onClick={form.handleSubmit(handleSubmit)}
+        >
+          Next
+        </Button>
+      </div>
+    </div>
   );
 }
