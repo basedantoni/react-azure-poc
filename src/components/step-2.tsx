@@ -8,7 +8,16 @@ import {
   FormMessage,
 } from './ui/form';
 import { Input } from './ui/input';
+import { Textarea } from './ui/textarea';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from './ui/tooltip';
 
+import { Check, X, TriangleAlert, Info } from 'lucide-react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useFormStepper } from '@/hooks/form';
 import { step2Schema } from '@/schema';
@@ -18,8 +27,13 @@ import { z } from 'zod';
 type Step2Values = z.infer<typeof step2Schema>;
 
 export function Step2() {
-  const { incrementCurrentStep, setIncludePayrollDeduction, user } =
+  const { incrementCurrentStep, setIncludePayrollDeduction, user, setUser } =
     useFormStepper();
+
+  const [showChildrenVerification, setShowChildrenVerification] =
+    useState(true);
+  const [showAdditionalChildTextArea, setShowAdditionalChildTextArea] =
+    useState(false);
 
   const form = useForm<Step2Values>({
     resolver: zodResolver(step2Schema),
@@ -30,10 +44,15 @@ export function Step2() {
       employeeTickets: 0,
       guestTickets: 0,
       childrenTickets: 0,
+      additionalChildren: '',
     },
   });
 
   const handleSubmit = () => {
+    setUser({
+      ...user,
+      guest: form.getValues('guestTickets') > 0,
+    });
     incrementCurrentStep();
   };
 
@@ -100,13 +119,14 @@ export function Step2() {
               </FormItem>
             )}
           />
-          <div className='flex flex-col max-w-80'>
+          <div className='flex flex-col gap-2 max-w-96'>
             <h2 className='text-xl font-semibold'>
               Tickets Provided by Zachry Corp
             </h2>
-            <p className='text-sm text-gray-500'>
-              Zachry Corp will provide you with the following tickets free of
-              charge
+            <p className='text-sm text-muted-foreground'>
+              Zachry Corporation will provide Six Flags Fiesta Texas tickets for
+              you and your <span className='font-semibold'>immediate</span>{' '}
+              family at no charge to you.
             </p>
           </div>
 
@@ -142,8 +162,8 @@ export function Step2() {
                     <span
                       className={`${
                         form.formState.errors.guestTickets
-                          ? 'text-red-500'
-                          : 'text-gray-500'
+                          ? 'text-destructive'
+                          : 'text-muted-foreground'
                       } text-xs`}
                     >
                       (max 1)
@@ -165,38 +185,111 @@ export function Step2() {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name='childrenTickets'
-              render={({ field }) => (
-                <FormItem className='flex justify-between'>
-                  <FormLabel>Children</FormLabel>
-                  <FormControl>
-                    <Input
-                      readOnly
-                      className='w-16'
-                      {...field}
-                      type='number'
-                      min={0}
-                      max={10}
-                      value={user?.children}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+            <div
+              className={
+                showChildrenVerification
+                  ? 'flex flex-col gap-2 p-4 rounded-md bg-warning'
+                  : ''
+              }
+            >
+              {showChildrenVerification && (
+                <div className='flex items-center justify-between'>
+                  <div className='flex items-end gap-2'>
+                    <TriangleAlert className='w-5 h-5 text-warning-foreground' />
+                    <p className='text-sm text-warning-foreground'>
+                      Please verify this is the correct number of children
+                    </p>
+                  </div>
+                  <div>
+                    <Button
+                      onClick={() => setShowChildrenVerification(false)}
+                      variant='ghost'
+                      size='sm'
+                    >
+                      <Check className='w-4 h-4 text-success' />
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setShowChildrenVerification(false);
+                        setShowAdditionalChildTextArea(true);
+                      }}
+                      variant='ghost'
+                      size='sm'
+                    >
+                      <X className='w-4 h-4 text-destructive' />
+                    </Button>
+                  </div>
+                </div>
               )}
-            />
+              <FormField
+                control={form.control}
+                name='childrenTickets'
+                render={({ field }) => (
+                  <FormItem className='flex justify-between'>
+                    <div className='flex items-center gap-2'>
+                      <FormLabel>Children</FormLabel>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Info className='w-4 h-4 text-muted-foreground' />
+                          </TooltipTrigger>
+                          <TooltipContent side='right'>
+                            <p className='max-w-sm'>
+                              <span className='font-bold'>Disclaimer:</span> For
+                              dependent children living at home ages 3-26 only
+                              who may be claimed as dependent on federal tax
+                              return. Children 2- years-old and younger do not
+                              need an admission ticket. For all others, you must
+                              purchase additional tickets.
+                            </p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                    <FormControl>
+                      <Input
+                        readOnly
+                        className='w-16'
+                        {...field}
+                        type='number'
+                        min={0}
+                        max={10}
+                        value={user?.children}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              {showAdditionalChildTextArea && (
+                <FormField
+                  control={form.control}
+                  name='additionalChildren'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Why is this not correct?</FormLabel>
+                      <FormControl>
+                        <Textarea {...field} />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              )}
+            </div>
           </div>
         </form>
       </Form>
       <div className='flex w-full justify-end gap-2'>
         <Button
+          disabled={showChildrenVerification}
+          className='cursor-pointer'
           variant='secondary'
           onClick={form.handleSubmit(handlePurchaseTickets)}
         >
           Purchase Add'tl Tickets
         </Button>
         <Button
+          disabled={showChildrenVerification}
           className='cursor-pointer'
           onClick={form.handleSubmit(handleSubmit)}
         >

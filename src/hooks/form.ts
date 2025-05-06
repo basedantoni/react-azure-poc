@@ -13,6 +13,11 @@ interface FormStepper {
   user: User;
   setUser: (user: User) => void;
 
+  fullTicketCount: number;
+  setFullTicketCount: (count: number) => void;
+  mealTicketCount: number;
+  setMealTicketCount: (count: number) => void;
+
   payrollDeductionAmount: number;
   setPayrollDeductionAmount: (amount: number) => void;
 }
@@ -40,6 +45,10 @@ export const useFormStepper = create<FormStepper>()((set) => ({
     updatedAt: '',
   },
   setUser: (user: User) => set({ user }),
+  fullTicketCount: 0,
+  setFullTicketCount: (count: number) => set({ fullTicketCount: count }),
+  mealTicketCount: 0,
+  setMealTicketCount: (count: number) => set({ mealTicketCount: count }),
   payrollDeductionAmount: 0,
   setPayrollDeductionAmount: (amount: number) =>
     set({ payrollDeductionAmount: amount }),

@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 export default function PayrollDeductionForm() {
   const { user, payrollDeductionAmount, incrementCurrentStep } =
@@ -31,12 +32,13 @@ export default function PayrollDeductionForm() {
       name: `${user?.firstName} ${user?.lastName}`,
       employeeId: user?.ein.toString() ?? '',
       deptartment: '',
+      company: '',
       date: new Date().toLocaleDateString('en-US', {
         month: '2-digit',
         day: '2-digit',
         year: 'numeric',
       }),
-      amount: payrollDeductionAmount.toString(),
+      amount: `${payrollDeductionAmount}`,
       payPeriods: '',
       date2: new Date().toLocaleDateString('en-US', {
         month: '2-digit',
@@ -49,7 +51,7 @@ export default function PayrollDeductionForm() {
   const [pdfUrl, setPdfUrl] = useState('');
   const [signatureError, setSignatureError] = useState('');
   const sigCanvasRef = useRef<SignatureCanvas>(null);
-  const pdfPreviewRef = useRef<HTMLDivElement>(null);
+  const confirmButtonRef = useRef<HTMLButtonElement>(null);
 
   const handleSubmit = async (data: PayrollDeductionFormValues) => {
     // 1. Load PDF
@@ -64,9 +66,10 @@ export default function PayrollDeductionForm() {
     pdfForm.getTextField('employeeId').setText(data.employeeId);
     pdfForm.getTextField('department').setText(data.deptartment);
     pdfForm.getTextField('date').setText(data.date);
+    pdfForm.getRadioGroup('company').select(data.company);
     pdfForm.getTextField('amount').setText(data.amount);
     pdfForm.getTextField('payPeriods').setText(data.payPeriods);
-    pdfForm.getTextField('date_2').setText(data.date2);
+    pdfForm.getTextField('date2').setText(data.date2);
 
     // 3. Capture & embed signature
     if (sigCanvasRef.current?.isEmpty()) {
@@ -80,7 +83,7 @@ export default function PayrollDeductionForm() {
     if (!dataUrl) return;
     const imgBytes = await fetch(dataUrl).then((r) => r.arrayBuffer());
     const pngImage = await pdfDoc.embedPng(imgBytes);
-    pdfForm.getTextField('signature_es_:signer:signature').setImage(pngImage);
+    pdfForm.getTextField('signature').setImage(pngImage);
 
     // 4. Serialize & blobify
     const pdfBytes = await pdfDoc.save();
@@ -90,8 +93,8 @@ export default function PayrollDeductionForm() {
 
     // Timeout to allow the PDF to load
     setTimeout(() => {
-      if (pdfPreviewRef.current) {
-        pdfPreviewRef.current.scrollIntoView({ behavior: 'smooth' });
+      if (confirmButtonRef.current) {
+        confirmButtonRef.current.scrollIntoView({ behavior: 'smooth' });
       }
     }, 100);
   };
@@ -134,6 +137,47 @@ export default function PayrollDeductionForm() {
                 <FormLabel>Department</FormLabel>
                 <FormControl>
                   <Input {...field} placeholder='Department' />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name='company'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Company</FormLabel>
+                <FormControl>
+                  <RadioGroup
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormItem className='flex gap-2'>
+                      <FormControl>
+                        <RadioGroupItem value='zachryConstruction' />
+                      </FormControl>
+                      <FormLabel>Zachry Construction</FormLabel>
+                    </FormItem>
+                    <FormItem className='flex gap-2'>
+                      <FormControl>
+                        <RadioGroupItem value='zachryHotel' />
+                      </FormControl>
+                      <FormLabel>Zachry Hotels</FormLabel>
+                    </FormItem>
+                    <FormItem className='flex gap-2'>
+                      <FormControl>
+                        <RadioGroupItem value='zuus' />
+                      </FormControl>
+                      <FormLabel>Zuus</FormLabel>
+                    </FormItem>
+                    <FormItem className='flex gap-2'>
+                      <FormControl>
+                        <RadioGroupItem value='capitolAggregates' />
+                      </FormControl>
+                      <FormLabel>Capitol Aggregates</FormLabel>
+                    </FormItem>
+                  </RadioGroup>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -208,16 +252,21 @@ export default function PayrollDeductionForm() {
         </form>
 
         {pdfUrl && (
-          <div ref={pdfPreviewRef} className='space-y-4'>
+          <div className='space-y-4'>
             <p className='text-lg font-bold'>Preview</p>
-            <iframe className='w-full h-[600px] sm:h-[1024px]' src={pdfUrl} />
+            <iframe className='w-full h-[600px] sm:h-[875px]' src={pdfUrl} />
             <div className='flex justify-end gap-2'>
               <Button variant='secondary' asChild>
                 <a href={pdfUrl} download='filled-form.pdf'>
                   Download Filled PDF
                 </a>
               </Button>
-              <Button onClick={() => incrementCurrentStep()}>Confirm</Button>
+              <Button
+                ref={confirmButtonRef}
+                onClick={() => incrementCurrentStep()}
+              >
+                Confirm
+              </Button>
             </div>
           </div>
         )}

@@ -22,10 +22,18 @@ import {
 } from './ui/table';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useFormStepper } from '@/hooks/form';
 
 type Step4Values = z.infer<typeof step4Schema>;
 
+// TODO: get the real prices from the backend
+const TICKET_PRICE = 60;
+const MEAL_TICKET_PRICE = 20;
+
 export function Step4() {
+  const { fullTicketCount, mealTicketCount, payrollDeductionAmount } =
+    useFormStepper();
+
   const form = useForm<Step4Values>({
     resolver: zodResolver(step4Schema),
     defaultValues: {
@@ -46,21 +54,25 @@ export function Step4() {
               <TableHead>Type of Ticket</TableHead>
               <TableHead>Quantity</TableHead>
               <TableHead>Price</TableHead>
-              <TableHead>Amount Due</TableHead>
+              <TableHead className='text-right'>Amount Due</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             <TableRow>
               <TableCell>Full Ticket (meal ticket included)</TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
+              <TableCell>{fullTicketCount}</TableCell>
+              <TableCell>${TICKET_PRICE}</TableCell>
+              <TableCell className='text-right'>
+                ${fullTicketCount * TICKET_PRICE}
+              </TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Meal Ticket</TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
+              <TableCell>{mealTicketCount}</TableCell>
+              <TableCell>${MEAL_TICKET_PRICE}</TableCell>
+              <TableCell className='text-right'>
+                ${mealTicketCount * MEAL_TICKET_PRICE}
+              </TableCell>
             </TableRow>
           </TableBody>
           <TableFooter>
@@ -68,7 +80,9 @@ export function Step4() {
               <TableCell>Total</TableCell>
               <TableCell></TableCell>
               <TableCell></TableCell>
-              <TableCell>$0</TableCell>
+              <TableCell className='text-right'>
+                ${payrollDeductionAmount}
+              </TableCell>
             </TableRow>
           </TableFooter>
         </Table>
@@ -87,7 +101,9 @@ export function Step4() {
             </FormItem>
           )}
         />
-        <Button type='submit'>Submit</Button>
+        <div className='flex justify-end gap-2'>
+          <Button type='submit'>Submit</Button>
+        </div>
       </form>
     </Form>
   );

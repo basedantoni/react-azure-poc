@@ -52,7 +52,10 @@ export function Step1() {
       }
 
       if (result) {
-        setUser(result);
+        setUser({
+          ...result,
+          park: values.park,
+        });
         incrementCurrentStep();
       }
     } catch (error) {

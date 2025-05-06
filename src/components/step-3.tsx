@@ -11,6 +11,7 @@ import {
   TableFooter,
 } from './ui/table';
 
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useFormStepper } from '@/hooks/form';
 import { step3Schema } from '@/schema';
@@ -19,19 +20,37 @@ import { z } from 'zod';
 
 type Step3Values = z.infer<typeof step3Schema>;
 
+// TODO: get the real prices from the backend
+const TICKET_PRICE = 60;
+const MEAL_TICKET_PRICE = 20;
+
 export function Step3() {
-  const { incrementCurrentStep, setPayrollDeductionAmount } = useFormStepper();
+  const {
+    incrementCurrentStep,
+    setPayrollDeductionAmount,
+    fullTicketCount,
+    mealTicketCount,
+    setFullTicketCount,
+    setMealTicketCount,
+  } = useFormStepper();
+  const [ticketQuantity, setTicketQuantity] = useState(fullTicketCount);
+  const [mealTicketQuantity, setMealTicketQuantity] = useState(mealTicketCount);
 
   const form = useForm<Step3Values>({
     resolver: zodResolver(step3Schema),
     defaultValues: {
-      fullTicketQuantity: 0,
-      mealTicketQuantity: 0,
+      fullTicketQuantity: fullTicketCount,
+      mealTicketQuantity: mealTicketCount,
     },
   });
+
   const onSubmit = (data: Step3Values) => {
-    console.log(data);
-    setPayrollDeductionAmount(data.fullTicketQuantity * 100); // TODO: get the real price
+    setFullTicketCount(data.fullTicketQuantity);
+    setMealTicketCount(data.mealTicketQuantity);
+    setPayrollDeductionAmount(
+      data.fullTicketQuantity * TICKET_PRICE +
+        data.mealTicketQuantity * MEAL_TICKET_PRICE
+    );
     incrementCurrentStep();
   };
 
@@ -45,7 +64,7 @@ export function Step3() {
                 <TableHead>Type of Ticket</TableHead>
                 <TableHead>Quantity</TableHead>
                 <TableHead>Price</TableHead>
-                <TableHead>Amount Due</TableHead>
+                <TableHead className='text-right'>Amount Due</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -58,15 +77,21 @@ export function Step3() {
                     render={({ field }) => (
                       <Input
                         type='number'
+                        className='w-16'
                         {...field}
                         min={0}
-                        onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                        onChange={(e) => {
+                          field.onChange(e.target.valueAsNumber);
+                          setTicketQuantity(e.target.valueAsNumber);
+                        }}
                       />
                     )}
                   />
                 </TableCell>
-                <TableCell>$0</TableCell>
-                <TableCell>$0</TableCell>
+                <TableCell>${TICKET_PRICE}</TableCell>
+                <TableCell className='text-right'>
+                  ${TICKET_PRICE * ticketQuantity}
+                </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>Meal Ticket</TableCell>
@@ -77,16 +102,22 @@ export function Step3() {
                     render={({ field }) => (
                       <Input
                         type='number'
+                        className='w-16'
                         {...field}
                         min={0}
-                        onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                        onChange={(e) => {
+                          field.onChange(e.target.valueAsNumber);
+                          setMealTicketQuantity(e.target.valueAsNumber);
+                        }}
                       />
                     )}
                   />
                   <FormMessage />
                 </TableCell>
-                <TableCell>$0</TableCell>
-                <TableCell>$0</TableCell>
+                <TableCell>${MEAL_TICKET_PRICE}</TableCell>
+                <TableCell className='text-right'>
+                  ${MEAL_TICKET_PRICE * mealTicketQuantity}
+                </TableCell>
               </TableRow>
             </TableBody>
             <TableFooter>
@@ -94,7 +125,13 @@ export function Step3() {
                 <TableCell>Total</TableCell>
                 <TableCell></TableCell>
                 <TableCell></TableCell>
-                <TableCell>$0</TableCell>
+                <TableCell className='text-right'>
+                  $
+                  {(
+                    TICKET_PRICE * ticketQuantity +
+                    MEAL_TICKET_PRICE * mealTicketQuantity
+                  ).toFixed(2)}
+                </TableCell>
               </TableRow>
             </TableFooter>
           </Table>

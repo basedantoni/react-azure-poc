@@ -35,6 +35,7 @@ export const step2Schema = z.object({
   employeeTickets: z.number().min(0),
   guestTickets: z.number().max(1).min(0),
   childrenTickets: z.number().min(0),
+  additionalChildren: z.string().optional(),
 });
 
 export const step3Schema = z.object({
@@ -56,6 +57,7 @@ export const PayrollDeductionFormSchema = z.object({
   name: z.string().min(1),
   employeeId: z.string().min(1),
   deptartment: z.string().min(1),
+  company: z.string().min(1),
   date: z.string().min(1),
   amount: z.string().min(1),
   payPeriods: z.string().min(1).max(4),
