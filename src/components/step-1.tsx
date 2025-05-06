@@ -16,15 +16,13 @@ import { useFormStepper } from '@/hooks/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { useQuery } from '@tanstack/react-query';
 import { authenticateUser } from '@/api/users';
 
 type Step1Values = z.infer<typeof step1Schema>;
 
 export function Step1() {
   const { incrementCurrentStep, setUser } = useFormStepper();
-
-  const [isValid, setIsValid] = useState(false);
+  const [authError, setAuthError] = useState('');
 
   const form = useForm<Step1Values>({
     resolver: zodResolver(step1Schema),
@@ -35,32 +33,45 @@ export function Step1() {
     },
   });
 
-  const { data: user, isError } = useQuery({
-    queryKey: ['users', 'authenticate'],
-    queryFn: () =>
-      authenticateUser(form.getValues('ein'), form.getValues('lastName')),
-    enabled: isValid,
-  });
   const onSubmit = async () => {
-    setIsValid(true);
-    if (isError) {
-      setIsValid(false);
-      return;
-    }
+    try {
+      const values = form.getValues();
+      const result = await authenticateUser(values.ein, values.lastName);
 
-    // Wait for the query to complete
-    await form.handleSubmit(async () => {
-      console.log('user', user);
-      if (user) {
-        setUser(user);
+      if (result.message === 'User not found') {
+        setAuthError('User not found');
+        form.setError('ein', {
+          type: 'manual',
+          message: 'Invalid credentials',
+        });
+        form.setError('lastName', {
+          type: 'manual',
+          message: 'Invalid credentials',
+        });
+        return;
+      }
+
+      if (result) {
+        setUser(result);
         incrementCurrentStep();
       }
-    })();
+    } catch (error) {
+      setAuthError('Authentication failed');
+      form.setError('ein', { type: 'manual', message: 'Invalid credentials' });
+      form.setError('lastName', {
+        type: 'manual',
+        message: 'Invalid credentials',
+      });
+      console.error('Authentication failed:', error);
+    }
   };
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
+        {authError && (
+          <p className='text-xl font-medium text-destructive'>{authError}</p>
+        )}
         <FormField
           control={form.control}
           name='ein'
@@ -68,7 +79,11 @@ export function Step1() {
             <FormItem>
               <FormLabel>EIN</FormLabel>
               <FormControl>
-                <Input {...field} placeholder='EIN' />
+                <Input
+                  {...field}
+                  placeholder='EIN'
+                  onChangeCapture={() => setAuthError('')}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -81,7 +96,11 @@ export function Step1() {
             <FormItem>
               <FormLabel>Last Name</FormLabel>
               <FormControl>
-                <Input {...field} placeholder='Last Name' />
+                <Input
+                  {...field}
+                  placeholder='Last Name'
+                  onChangeCapture={() => setAuthError('')}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
