@@ -1,28 +1,20 @@
 import { useTranslation } from 'react-i18next';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 
 export function LanguageToggle() {
   const { i18n } = useTranslation();
 
-  const handleLanguageChange = (value: string) => {
-    i18n.changeLanguage(value);
+  const handleLanguageChange = (checked: boolean) => {
+    i18n.changeLanguage(checked ? 'es' : 'en');
   };
 
   return (
-    <Select value={i18n.language} onValueChange={handleLanguageChange}>
-      <SelectTrigger className='w-[100px]'>
-        <SelectValue placeholder='Select language' />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectItem value='en'>English</SelectItem>
-        <SelectItem value='es'>Español</SelectItem>
-      </SelectContent>
-    </Select>
+    <>
+      <div className='flex items-center gap-2'>
+        <Switch onCheckedChange={handleLanguageChange} />
+        <Label>Español</Label>
+      </div>
+    </>
   );
 }

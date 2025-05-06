@@ -134,7 +134,7 @@ export default function PayrollDeductionForm() {
             name='deptartment'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Department</FormLabel>
+                <FormLabel required>Department</FormLabel>
                 <FormControl>
                   <Input {...field} placeholder='Department' />
                 </FormControl>
@@ -147,7 +147,7 @@ export default function PayrollDeductionForm() {
             name='company'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Company</FormLabel>
+                <FormLabel required>Company</FormLabel>
                 <FormControl>
                   <RadioGroup
                     onValueChange={field.onChange}
@@ -201,7 +201,7 @@ export default function PayrollDeductionForm() {
             name='payPeriods'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Pay Periods</FormLabel>
+                <FormLabel required>Pay Periods</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
@@ -216,7 +216,10 @@ export default function PayrollDeductionForm() {
             )}
           />
           <div className='space-y-2'>
-            <Label className={signatureError ? 'text-destructive' : ''}>
+            <Label
+              required
+              className={signatureError ? 'text-destructive' : ''}
+            >
               Sign here:
             </Label>
             <div

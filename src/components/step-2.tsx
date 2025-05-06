@@ -157,7 +157,7 @@ export function Step2() {
               name='guestTickets'
               render={({ field }) => (
                 <FormItem className='flex justify-between'>
-                  <FormLabel>
+                  <FormLabel required>
                     Spouse/Guest{' '}
                     <span
                       className={`${

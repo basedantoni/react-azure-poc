@@ -80,7 +80,7 @@ export function Step1() {
           name='ein'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>EIN</FormLabel>
+              <FormLabel required>EIN</FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -97,7 +97,7 @@ export function Step1() {
           name='lastName'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Last Name</FormLabel>
+              <FormLabel required>Last Name</FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -114,7 +114,7 @@ export function Step1() {
           name='park'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Park</FormLabel>
+              <FormLabel required>Park</FormLabel>
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
