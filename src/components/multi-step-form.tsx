@@ -50,7 +50,7 @@ export function MultiStepForm() {
   return (
     <div className='flex flex-col w-full px-4 sm:px-8 sm:max-w-[1000px] items-center justify-center space-y-4'>
       {!isFirstStep ? (
-        <div className='flex items-center justify-between w-full p-3 sm:px-5 sm:py-4'>
+        <div className='flex items-center justify-between w-full p-3 sm:px-0 sm:py-4'>
           <Button
             className='mt-3 self-start'
             variant='link'
@@ -63,7 +63,7 @@ export function MultiStepForm() {
           <LanguageToggle />
         </div>
       ) : (
-        <div className='flex items-center justify-end w-full py-3'>
+        <div className='min-h-20 flex items-center justify-end w-full py-3'>
           <LanguageToggle />
         </div>
       )}

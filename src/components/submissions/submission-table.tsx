@@ -1,14 +1,12 @@
-import RequestModal from './request-modal';
-
 import { useQuery } from '@tanstack/react-query';
 import { DataTable } from './data-table';
 import { columns } from './columns';
-import { getRequests } from '@/api/requests';
+import { getSubmissions } from '@/api/submissions';
 
-export function RequestTable() {
+export function SubmissionTable() {
   const { isPending, data, error } = useQuery({
-    queryKey: ['requests'],
-    queryFn: getRequests,
+    queryKey: ['submissions'],
+    queryFn: getSubmissions,
   });
 
   if (isPending) return <div>Loading...</div>;
@@ -17,7 +15,6 @@ export function RequestTable() {
   return (
     <>
       <DataTable data={data} columns={columns} />
-      <RequestModal emptyState />
     </>
   );
 }

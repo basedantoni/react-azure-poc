@@ -1,7 +1,8 @@
+import { Outlet, createRootRoute } from '@tanstack/react-router';
+import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ThemeProvider } from '@/components/theme-provider';
-import { MultiStepForm } from '@/components/multi-step-form';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -11,17 +12,18 @@ const queryClient = new QueryClient({
   },
 });
 
-function App() {
+export const Route = createRootRoute({
+  component: RootComponent,
+});
+
+function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <div className='container mx-auto flex flex-col items-center gap-4'>
-          <MultiStepForm />
-        </div>
+        <Outlet />
       </ThemeProvider>
+      <TanStackRouterDevtools />
       {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
     </QueryClientProvider>
   );
 }
-
-export default App;
