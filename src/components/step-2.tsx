@@ -62,9 +62,9 @@ export function Step2() {
   };
 
   return (
-    <div className='flex flex-col space-y-8'>
+    <div className='flex flex-col space-y-6'>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className='space-y-8'>
+        <form onSubmit={form.handleSubmit(handleSubmit)} className='space-y-4'>
           <FormField
             control={form.control}
             name='name'
@@ -119,7 +119,7 @@ export function Step2() {
               </FormItem>
             )}
           />
-          <div className='flex flex-col gap-2 max-w-96'>
+          <div className='flex flex-col gap-1 max-w-96'>
             <h2 className='text-xl font-semibold'>
               Tickets Provided by Zachry Corp
             </h2>
@@ -130,7 +130,7 @@ export function Step2() {
             </p>
           </div>
 
-          <div className='flex flex-col gap-1.5'>
+          <div className='flex flex-col space-y-2'>
             <FormField
               control={form.control}
               name='employeeTickets'
@@ -194,13 +194,13 @@ export function Step2() {
             >
               {showChildrenVerification && (
                 <div className='flex items-center justify-between'>
-                  <div className='flex items-end gap-2'>
+                  <div className='flex items-start sm:items-end gap-2'>
                     <TriangleAlert className='w-5 h-5 text-warning-foreground' />
                     <p className='text-sm text-warning-foreground'>
                       Please verify this is the correct number of children
                     </p>
                   </div>
-                  <div>
+                  <div className='flex'>
                     <Button
                       onClick={() => setShowChildrenVerification(false)}
                       variant='ghost'
@@ -233,8 +233,8 @@ export function Step2() {
                           <TooltipTrigger asChild>
                             <Info className='w-4 h-4 text-muted-foreground' />
                           </TooltipTrigger>
-                          <TooltipContent side='right'>
-                            <p className='max-w-sm'>
+                          <TooltipContent side='top'>
+                            <p className='max-w-xs sm:max-w-sm'>
                               <span className='font-bold'>Disclaimer:</span> For
                               dependent children living at home ages 3-26 only
                               who may be claimed as dependent on federal tax

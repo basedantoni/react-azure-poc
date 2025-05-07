@@ -9,6 +9,8 @@ import {
 } from './ui/form';
 import { Input } from './ui/input';
 
+import { sendEmail } from '@/api/email';
+import { useNavigate } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';
 import { step4Schema } from '@/schema';
 import {
@@ -23,7 +25,6 @@ import {
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useFormStepper } from '@/hooks/form';
-
 type Step4Values = z.infer<typeof step4Schema>;
 
 // TODO: get the real prices from the backend
@@ -31,6 +32,8 @@ const TICKET_PRICE = 60;
 const MEAL_TICKET_PRICE = 20;
 
 export function Step4() {
+  const navigate = useNavigate();
+
   const { fullTicketCount, mealTicketCount, payrollDeductionAmount } =
     useFormStepper();
 
@@ -42,7 +45,14 @@ export function Step4() {
   });
 
   const onSubmit = (data: Step4Values) => {
-    console.log(data);
+    if (data.email) {
+      sendEmail(
+        data.email,
+        'Order Confirmation',
+        'Your order has been confirmed'
+      );
+    }
+    navigate({ to: '/confirmation' });
   };
 
   return (
@@ -93,7 +103,12 @@ export function Step4() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder='Enter your email' type='email' {...field} />
+                <Input
+                  className='w-96'
+                  placeholder='Enter your email'
+                  type='email'
+                  {...field}
+                />
               </FormControl>
               <FormDescription>
                 Enter your email to recieve a copy of this order

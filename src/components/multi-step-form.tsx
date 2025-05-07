@@ -67,6 +67,7 @@ export function MultiStepForm() {
           <LanguageToggle />
         </div>
       )}
+      <img src='/img/zachry-logo.webp' alt='Zachry Logo' />
 
       <StepIndicator current={currentStep} steps={steps} />
       <h1 className='text-center'>{steps[currentStep].label}</h1>

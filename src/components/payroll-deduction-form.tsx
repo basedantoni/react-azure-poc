@@ -1,5 +1,5 @@
 import SignatureCanvas from 'react-signature-canvas';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { PDFDocument } from 'pdf-lib';
 import {
   PayrollDeductionFormValues,
@@ -25,6 +25,20 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 export default function PayrollDeductionForm() {
   const { user, payrollDeductionAmount, incrementCurrentStep } =
     useFormStepper();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        )
+      );
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const form = useForm<PayrollDeductionFormValues>({
     resolver: zodResolver(PayrollDeductionFormSchema),
@@ -232,9 +246,7 @@ export default function PayrollDeductionForm() {
                 penColor='black'
                 backgroundColor='#f0f0f0'
                 canvasProps={{
-                  width: 384,
-                  height: 100,
-                  className: 'sigCanvas',
+                  className: 'sigCanvas w-full h-24',
                 }}
               />
             </div>
@@ -257,7 +269,28 @@ export default function PayrollDeductionForm() {
         {pdfUrl && (
           <div className='space-y-4'>
             <p className='text-lg font-bold'>Preview</p>
-            <iframe className='w-full h-[600px] sm:h-[875px]' src={pdfUrl} />
+            {isMobile ? (
+              <div className='flex flex-col items-center gap-4 p-4 border rounded-lg'>
+                <p className='text-center text-muted-foreground'>
+                  PDF preview is not available on mobile devices. Please
+                  download the PDF to view it.
+                </p>
+                <Button
+                  variant='secondary'
+                  asChild
+                  className='w-full sm:w-auto'
+                >
+                  <a href={pdfUrl} download='filled-form.pdf'>
+                    Download PDF
+                  </a>
+                </Button>
+              </div>
+            ) : (
+              <iframe
+                className='w-full h-[50vh] sm:h-[70vh] md:h-[80vh]'
+                src={pdfUrl}
+              />
+            )}
             <div className='flex justify-end gap-2'>
               <Button variant='secondary' asChild>
                 <a href={pdfUrl} download='filled-form.pdf'>
