@@ -117,26 +117,42 @@ export function Step1() {
               <FormLabel required>Park</FormLabel>
               <FormControl>
                 <RadioGroup
+                  className='flex flex-row justify-between'
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  defaultValue={field.value ?? ''}
                 >
-                  <FormItem className='flex gap-2'>
+                  <FormItem className='flex flex-col items-center gap-2'>
+                    <img
+                      className='w-20 h-12'
+                      src='/img/fiesta-texas.webp'
+                      alt='Fiesta Texas'
+                    />
+                    <FormLabel>Fiesta Texas</FormLabel>
                     <FormControl>
                       <RadioGroupItem value='Fiesta Texas' />
                     </FormControl>
-                    <FormLabel>Fiesta Texas</FormLabel>
                   </FormItem>
-                  <FormItem className='flex gap-2'>
+                  <FormItem className='flex flex-col items-center gap-2'>
+                    <img
+                      className='w-20 h-12'
+                      src='/img/six-flags.webp'
+                      alt='Six Flags'
+                    />
+                    <FormLabel>Six Flags</FormLabel>
                     <FormControl>
                       <RadioGroupItem value='Six Flags' />
                     </FormControl>
-                    <FormLabel>Six Flags</FormLabel>
                   </FormItem>
-                  <FormItem className='flex gap-2'>
+                  <FormItem className='flex flex-col items-center gap-2'>
+                    <img
+                      className='w-32 h-12'
+                      src='/img/carowinds.webp'
+                      alt='Carowinds'
+                    />
+                    <FormLabel>Carowinds</FormLabel>
                     <FormControl>
                       <RadioGroupItem value='Carowinds' />
                     </FormControl>
-                    <FormLabel>Carowinds</FormLabel>
                   </FormItem>
                 </RadioGroup>
               </FormControl>

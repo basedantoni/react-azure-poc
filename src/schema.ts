@@ -44,7 +44,7 @@ export const step3Schema = z.object({
 });
 
 export const step4Schema = z.object({
-  email: z.string().email().optional(),
+  email: z.string().email().optional().or(z.literal('')),
 });
 
 export const FormSchema = step1Schema

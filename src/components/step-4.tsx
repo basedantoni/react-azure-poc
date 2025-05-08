@@ -45,7 +45,7 @@ export function Step4() {
   });
 
   const onSubmit = (data: Step4Values) => {
-    if (data.email) {
+    if (data.email && data.email.trim() !== '') {
       sendEmail(
         data.email,
         'Order Confirmation',
