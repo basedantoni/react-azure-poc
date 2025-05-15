@@ -8,6 +8,7 @@ import {
   Form,
 } from './ui/form';
 import { Input } from './ui/input';
+import { PDFDocument, rgb } from 'pdf-lib';
 
 import { sendEmail } from '@/api/email';
 import { useNavigate } from '@tanstack/react-router';
@@ -48,6 +49,93 @@ export function Step4() {
       email: '',
     },
   });
+
+  const handlePrint = async () => {
+    // Create a new PDF document
+    const pdfDoc = await PDFDocument.create();
+    const page = pdfDoc.addPage([595.28, 841.89]); // A4 size
+    const { width, height } = page.getSize();
+    const fontSize = 12;
+    const lineHeight = fontSize * 1.2;
+    let y = height - 50; // Start from top with margin
+
+    // Helper function to add text
+    const addText = (text: string, x: number, y: number, options = {}) => {
+      page.drawText(text, {
+        x,
+        y,
+        size: fontSize,
+        color: rgb(0, 0, 0),
+        ...options,
+      });
+    };
+
+    // Add title
+    addText('Order Summary', width / 2 - 50, y, { size: 20 });
+    y -= lineHeight * 2;
+
+    // Section A
+    addText('Section A - from Zachry Corporation', 50, y, { size: 16 });
+    y -= lineHeight * 1.5;
+    addText(`Employee Tickets: 1`, 50, y);
+    y -= lineHeight;
+    addText(`Guest Tickets: ${totalGuestTickets}`, 50, y);
+    y -= lineHeight;
+    addText(`Children Tickets: ${totalChildrenTickets}`, 50, y);
+    y -= lineHeight * 2;
+
+    // Section B
+    addText('Section B - Employee Purchase', 50, y, { size: 16 });
+    y -= lineHeight * 1.5;
+    addText(
+      `Full Tickets: ${fullTicketCount} x $${TICKET_PRICE} = $${fullTicketCount * TICKET_PRICE}`,
+      50,
+      y
+    );
+    y -= lineHeight;
+    addText(
+      `Meal Tickets: ${mealTicketCount} x $${MEAL_TICKET_PRICE} = $${mealTicketCount * MEAL_TICKET_PRICE}`,
+      50,
+      y
+    );
+    y -= lineHeight;
+    addText(`Total Purchased by Employee: $${payrollDeductionAmount}`, 50, y);
+    y -= lineHeight * 2;
+
+    // Section C
+    addText('Section C', 50, y, { size: 16 });
+    y -= lineHeight * 1.5;
+    addText(
+      `Tickets Purchased by Zachry: ${totalGuestTickets + totalChildrenTickets + 1}`,
+      50,
+      y
+    );
+    y -= lineHeight;
+    addText(
+      `Tickets Purchased by Employee: ${fullTicketCount + mealTicketCount}`,
+      50,
+      y
+    );
+    y -= lineHeight;
+    addText(
+      `Total Number of Tickets Ordered: ${totalGuestTickets + totalChildrenTickets + 1 + fullTicketCount + mealTicketCount}`,
+      50,
+      y
+    );
+
+    // Save the PDF
+    const pdfBytes = await pdfDoc.save();
+    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+    const url = URL.createObjectURL(blob);
+
+    // Open PDF in new window for printing
+    const printWindow = window.open(url, '_blank');
+    if (printWindow) {
+      printWindow.onload = () => {
+        printWindow.print();
+      };
+    }
+  };
 
   const onSubmit = (data: Step4Values) => {
     if (data.email && data.email.trim() !== '') {
@@ -169,7 +257,7 @@ export function Step4() {
             )}
           />
           <div className='flex justify-end gap-2'>
-            <Button type='button' variant='outline'>
+            <Button type='button' variant='outline' onClick={handlePrint}>
               Print
             </Button>
             <Button type='submit'>Submit</Button>
