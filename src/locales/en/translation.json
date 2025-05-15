@@ -3,5 +3,7 @@
   "orderDetails": "Order Details",
   "purchaseAdditionalTickets": "Purchase Additional Tickets",
   "payrollDeduction": "Payroll Deduction Form",
-  "orderSummary": "Order Summary"
+  "orderSummary": "Order Summary",
+  "welcomeDescription": "Deadline to order tickets is September 15th",
+  "purchaseAdditionalTicketsDescription": "Additional Tickets Order for Extended Family Members"
 }

@@ -22,6 +22,7 @@ export function MultiStepForm() {
     {
       label: t('welcome'),
       component: <Step1 />,
+      description: t('welcomeDescription'),
     },
     {
       label: t('orderDetails'),
@@ -30,6 +31,7 @@ export function MultiStepForm() {
     {
       label: t('purchaseAdditionalTickets'),
       component: <Step3 />,
+      description: t('purchaseAdditionalTicketsDescription'),
     },
     {
       label: t('payrollDeduction'),
@@ -70,7 +72,12 @@ export function MultiStepForm() {
       <img src='/img/zachry-logo.webp' alt='Zachry Logo' />
 
       <StepIndicator current={currentStep} steps={steps} />
-      <h1 className='text-center'>{steps[currentStep].label}</h1>
+      <div className='flex flex-col items-center justify-center space-y-2'>
+        <h1 className='text-center'>{steps[currentStep].label}</h1>
+        <p className='text-muted-foreground text-center'>
+          {steps[currentStep].description ?? ''}
+        </p>
+      </div>
       <div className='w-full'>{steps[currentStep].component}</div>
     </div>
   );

@@ -10,6 +10,7 @@ import {
   TableCell,
   TableFooter,
 } from './ui/table';
+import { ProvidedTicketsTable } from './provided-tickets-table';
 
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -32,7 +33,12 @@ export function Step3() {
     mealTicketCount,
     setFullTicketCount,
     setMealTicketCount,
+    user,
   } = useFormStepper();
+
+  const totalGuestTickets = user.guest ? 1 : 0;
+  const totalChildrenTickets = user.children ? user.children : 0;
+
   const [ticketQuantity, setTicketQuantity] = useState(fullTicketCount);
   const [mealTicketQuantity, setMealTicketQuantity] = useState(mealTicketCount);
 
@@ -55,11 +61,16 @@ export function Step3() {
   };
 
   return (
-    <>
+    <div className='flex flex-col gap-8'>
+      <ProvidedTicketsTable
+        guestTickets={totalGuestTickets}
+        childrenTickets={totalChildrenTickets}
+      />
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
-          <Table>
-            <TableHeader>
+        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+          <h2 className='text-2xl font-bold text-center'>Employee Purchase</h2>
+          <Table className='border'>
+            <TableHeader className='bg-emerald-200'>
               <TableRow>
                 <TableHead>Type of Ticket</TableHead>
                 <TableHead>Quantity</TableHead>
@@ -94,7 +105,7 @@ export function Step3() {
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableCell>Meal Ticket</TableCell>
+                <TableCell>Meal Ticket (for season pass holders)</TableCell>
                 <TableCell>
                   <FormField
                     control={form.control}
@@ -122,7 +133,9 @@ export function Step3() {
             </TableBody>
             <TableFooter>
               <TableRow>
-                <TableCell>Total</TableCell>
+                <TableCell className='font-bold bg-emerald-200'>
+                  Total Purchased by Employee
+                </TableCell>
                 <TableCell></TableCell>
                 <TableCell></TableCell>
                 <TableCell className='text-right'>
@@ -142,6 +155,6 @@ export function Step3() {
           </div>
         </form>
       </Form>
-    </>
+    </div>
   );
 }

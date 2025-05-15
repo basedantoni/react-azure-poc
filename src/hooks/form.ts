@@ -13,10 +13,15 @@ interface FormStepper {
   user: User;
   setUser: (user: User) => void;
 
+  park: string;
+  setPark: (park: string) => void;
+
   fullTicketCount: number;
   setFullTicketCount: (count: number) => void;
   mealTicketCount: number;
   setMealTicketCount: (count: number) => void;
+  providedTicketCount: number;
+  setProvidedTicketCount: (count: number) => void;
 
   payrollDeductionAmount: number;
   setPayrollDeductionAmount: (amount: number) => void;
@@ -32,6 +37,8 @@ export const useFormStepper = create<FormStepper>()((set) => ({
   includePayrollDeduction: false,
   setIncludePayrollDeduction: (include: boolean) =>
     set({ includePayrollDeduction: include }),
+  park: '',
+  setPark: (park: string) => set({ park }),
   user: {
     id: '',
     ein: 0,
@@ -49,6 +56,9 @@ export const useFormStepper = create<FormStepper>()((set) => ({
   setFullTicketCount: (count: number) => set({ fullTicketCount: count }),
   mealTicketCount: 0,
   setMealTicketCount: (count: number) => set({ mealTicketCount: count }),
+  providedTicketCount: 0,
+  setProvidedTicketCount: (count: number) =>
+    set({ providedTicketCount: count }),
   payrollDeductionAmount: 0,
   setPayrollDeductionAmount: (amount: number) =>
     set({ payrollDeductionAmount: amount }),

@@ -3,5 +3,7 @@
   "orderDetails": "Detalles de la orden",
   "purchaseAdditionalTickets": "Comprar más entradas",
   "payrollDeduction": "Formulario de deducción de nómina",
-  "orderSummary": "Resumen de la orden"
+  "orderSummary": "Resumen de la orden",
+  "welcomeDescription": "La fecha límite para ordenar entradas es el 15 de septiembre",
+  "purchaseAdditionalTicketsDescription": "Ordenar entradas adicionales para miembros de la familia extendida"
 }

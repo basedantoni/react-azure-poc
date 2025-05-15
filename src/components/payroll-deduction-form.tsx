@@ -187,7 +187,7 @@ export default function PayrollDeductionForm() {
                     </FormItem>
                     <FormItem className='flex gap-2'>
                       <FormControl>
-                        <RadioGroupItem value='capitolAggregates' />
+                        <RadioGroupItem value='capitalAggregates' />
                       </FormControl>
                       <FormLabel>Capitol Aggregates</FormLabel>
                     </FormItem>

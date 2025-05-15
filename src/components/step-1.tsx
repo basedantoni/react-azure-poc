@@ -1,3 +1,4 @@
+import { AspectRatio } from './ui/aspect-ratio';
 import { Button } from './ui/button';
 import {
   Form,
@@ -21,7 +22,7 @@ import { authenticateUser } from '@/api/users';
 type Step1Values = z.infer<typeof step1Schema>;
 
 export function Step1() {
-  const { incrementCurrentStep, setUser } = useFormStepper();
+  const { incrementCurrentStep, setUser, setPark } = useFormStepper();
   const [authError, setAuthError] = useState('');
 
   const form = useForm<Step1Values>({
@@ -54,8 +55,8 @@ export function Step1() {
       if (result) {
         setUser({
           ...result,
-          park: values.park,
         });
+        setPark(values.park);
         incrementCurrentStep();
       }
     } catch (error) {
@@ -122,33 +123,39 @@ export function Step1() {
                   defaultValue={field.value ?? ''}
                 >
                   <FormItem className='flex flex-col items-center gap-2'>
-                    <img
-                      className='w-20 h-12'
-                      src='/img/fiesta-texas.webp'
-                      alt='Fiesta Texas'
-                    />
+                    <AspectRatio ratio={16 / 9}>
+                      <img
+                        className='object-cover'
+                        src='/img/fiesta-texas.webp'
+                        alt='Fiesta Texas'
+                      />
+                    </AspectRatio>
                     <FormLabel>Fiesta Texas</FormLabel>
                     <FormControl>
                       <RadioGroupItem value='Fiesta Texas' />
                     </FormControl>
                   </FormItem>
                   <FormItem className='flex flex-col items-center gap-2'>
-                    <img
-                      className='w-20 h-12'
-                      src='/img/six-flags.webp'
-                      alt='Six Flags'
-                    />
+                    <AspectRatio ratio={16 / 9}>
+                      <img
+                        className='object-cover'
+                        src='/img/six-flags.webp'
+                        alt='Six Flags'
+                      />
+                    </AspectRatio>
                     <FormLabel>Six Flags</FormLabel>
                     <FormControl>
                       <RadioGroupItem value='Six Flags' />
                     </FormControl>
                   </FormItem>
                   <FormItem className='flex flex-col items-center gap-2'>
-                    <img
-                      className='w-32 h-12'
-                      src='/img/carowinds.webp'
-                      alt='Carowinds'
-                    />
+                    <AspectRatio ratio={16 / 9}>
+                      <img
+                        className='object-cover'
+                        src='/img/carowinds.webp'
+                        alt='Carowinds'
+                      />
+                    </AspectRatio>
                     <FormLabel>Carowinds</FormLabel>
                     <FormControl>
                       <RadioGroupItem value='Carowinds' />
