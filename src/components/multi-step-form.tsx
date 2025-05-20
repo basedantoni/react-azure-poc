@@ -60,7 +60,7 @@ export function MultiStepForm() {
             disabled={isFirstStep}
           >
             <ArrowLeftIcon className='w-4 h-4' />
-            Back
+            {t('back')}
           </Button>
           <LanguageToggle />
         </div>

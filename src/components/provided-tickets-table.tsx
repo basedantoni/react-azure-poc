@@ -7,6 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from './ui/table';
+import { useTranslation } from 'react-i18next';
 
 export function ProvidedTicketsTable({
   guestTickets,
@@ -16,36 +17,40 @@ export function ProvidedTicketsTable({
   childrenTickets: number;
 }) {
   const totalTickets = guestTickets + childrenTickets + 1;
+  const { t } = useTranslation();
 
   return (
     <Table className='border'>
       <TableHeader className='bg-blue-200'>
         <TableRow>
           <TableHead className='font-bold'>
-            Tickets Provided by Zachry
+            {t('ticketsProvidedByZachryCorp')}
           </TableHead>
           <TableHead></TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         <TableRow>
-          <TableCell>Employee</TableCell>
+          <TableCell>{t('employee')}</TableCell>
           <TableCell className='text-right'>1</TableCell>
         </TableRow>
         <TableRow>
           <TableCell>
-            Spouse <span className='font-bold'>OR</span> Guest
+            {t('spouse')} <span className='font-bold'>{t('or')}</span>{' '}
+            {t('guest')}
           </TableCell>
           <TableCell className='text-right'>{guestTickets}</TableCell>
         </TableRow>
         <TableRow>
-          <TableCell>Children</TableCell>
+          <TableCell>{t('children')}</TableCell>
           <TableCell className='text-right'>{childrenTickets}</TableCell>
         </TableRow>
       </TableBody>
       <TableFooter className='bg-blue-200'>
         <TableRow>
-          <TableCell className='font-bold'>Total Provided by Zachry</TableCell>
+          <TableCell className='font-bold'>
+            {t('totalProvidedByZachry')}
+          </TableCell>
           <TableCell className='text-right'>{totalTickets}</TableCell>
         </TableRow>
       </TableFooter>

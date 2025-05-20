@@ -15,6 +15,7 @@ import { ProvidedTicketsTable } from './provided-tickets-table';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useFormStepper } from '@/hooks/form';
+import { useTranslation } from 'react-i18next';
 import { step3Schema } from '@/schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -26,6 +27,8 @@ const TICKET_PRICE = 60;
 const MEAL_TICKET_PRICE = 20;
 
 export function Step3() {
+  const { t } = useTranslation();
+
   const {
     incrementCurrentStep,
     setPayrollDeductionAmount,
@@ -69,21 +72,21 @@ export function Step3() {
       />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
-          <h2 className='text-2xl font-bold text-center'>Employee Purchase</h2>
+          <h2 className='text-2xl font-bold text-center'>
+            {t('employeePurchase')}
+          </h2>
           <Table className='border'>
             <TableHeader className='bg-emerald-200'>
               <TableRow>
-                <TableHead>Type of Ticket</TableHead>
-                <TableHead>Quantity</TableHead>
-                <TableHead>Price</TableHead>
-                <TableHead className='text-right'>Amount Due</TableHead>
+                <TableHead>{t('typeOfTicket')}</TableHead>
+                <TableHead>{t('quantity')}</TableHead>
+                <TableHead>{t('price')}</TableHead>
+                <TableHead className='text-right'>{t('amountDue')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               <TableRow>
-                <TableCell>
-                  Full Ticket (park admission + meal ticket)
-                </TableCell>
+                <TableCell>{t('fullTicket')}</TableCell>
                 <TableCell>
                   <FormField
                     control={form.control}
@@ -108,7 +111,7 @@ export function Step3() {
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableCell>Meal Ticket (for season pass holders)</TableCell>
+                <TableCell>{t('mealTicket')}</TableCell>
                 <TableCell>
                   <FormField
                     control={form.control}
@@ -137,7 +140,7 @@ export function Step3() {
             <TableFooter>
               <TableRow>
                 <TableCell className='font-bold bg-emerald-200'>
-                  Total Purchased by Employee
+                  {t('totalPurchasedByEmployee')}
                 </TableCell>
                 <TableCell></TableCell>
                 <TableCell></TableCell>
@@ -153,7 +156,7 @@ export function Step3() {
           </Table>
           <div className='flex justify-end gap-2'>
             <Button className='cursor-pointer' type='submit'>
-              Next
+              {t('next')}
             </Button>
           </div>
         </form>

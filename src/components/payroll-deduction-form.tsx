@@ -5,6 +5,7 @@ import {
   PayrollDeductionFormValues,
   PayrollDeductionFormSchema,
 } from '@/schema';
+import { useTranslation } from 'react-i18next';
 import { useFormStepper } from '@/hooks/form';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -23,6 +24,7 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 export default function PayrollDeductionForm() {
+  const { t } = useTranslation();
   const { user, payrollDeductionAmount, incrementCurrentStep } =
     useFormStepper();
   const [isMobile, setIsMobile] = useState(false);
@@ -122,9 +124,9 @@ export default function PayrollDeductionForm() {
             name='name'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Name</FormLabel>
+                <FormLabel>{t('name')}</FormLabel>
                 <FormControl>
-                  <Input readOnly {...field} placeholder='Name' />
+                  <Input readOnly {...field} placeholder={t('name')} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -135,9 +137,9 @@ export default function PayrollDeductionForm() {
             name='employeeId'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Employee ID</FormLabel>
+                <FormLabel>{t('employeeID')}</FormLabel>
                 <FormControl>
-                  <Input readOnly {...field} placeholder='Employee ID' />
+                  <Input readOnly {...field} placeholder={t('employeeID')} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -148,9 +150,9 @@ export default function PayrollDeductionForm() {
             name='deptartment'
             render={({ field }) => (
               <FormItem>
-                <FormLabel required>Department</FormLabel>
+                <FormLabel required>{t('department')}</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder='Department' />
+                  <Input {...field} placeholder={t('department')} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -161,7 +163,7 @@ export default function PayrollDeductionForm() {
             name='company'
             render={({ field }) => (
               <FormItem>
-                <FormLabel required>Company</FormLabel>
+                <FormLabel required>{t('company')}</FormLabel>
                 <FormControl>
                   <RadioGroup
                     onValueChange={field.onChange}
@@ -202,9 +204,9 @@ export default function PayrollDeductionForm() {
             name='amount'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Amount</FormLabel>
+                <FormLabel>{t('amount')}</FormLabel>
                 <FormControl>
-                  <Input readOnly {...field} placeholder='Amount' />
+                  <Input readOnly {...field} placeholder={t('amount')} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -215,11 +217,11 @@ export default function PayrollDeductionForm() {
             name='payPeriods'
             render={({ field }) => (
               <FormItem>
-                <FormLabel required>Pay Periods</FormLabel>
+                <FormLabel required>{t('payPeriods')}</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
-                    placeholder='Pay Periods'
+                    placeholder={t('payPeriods')}
                     type='number'
                     min={1}
                     max={4}
@@ -234,7 +236,7 @@ export default function PayrollDeductionForm() {
               required
               className={signatureError ? 'text-destructive' : ''}
             >
-              Sign here:
+              {t('signHere')}
             </Label>
             <div
               className={`rounded-md overflow-hidden ${
@@ -260,15 +262,15 @@ export default function PayrollDeductionForm() {
               onClick={() => sigCanvasRef.current?.clear()}
               variant='outline'
             >
-              Clear Signature
+              {t('clearSignature')}
             </Button>
-            <Button type='submit'>Next</Button>
+            <Button type='submit'>{t('next')}</Button>
           </div>
         </form>
 
         {pdfUrl && (
           <div className='space-y-4'>
-            <p className='text-lg font-bold'>Preview</p>
+            <p className='text-lg font-bold'>{t('preview')}</p>
             {isMobile ? (
               <div className='flex flex-col items-center gap-4 p-4 border rounded-lg'>
                 <p className='text-center text-muted-foreground'>
@@ -281,7 +283,7 @@ export default function PayrollDeductionForm() {
                   className='w-full sm:w-auto'
                 >
                   <a href={pdfUrl} download='filled-form.pdf'>
-                    Download PDF
+                    {t('downloadPDF')}
                   </a>
                 </Button>
               </div>
@@ -294,14 +296,14 @@ export default function PayrollDeductionForm() {
             <div className='flex justify-end gap-2'>
               <Button variant='secondary' asChild>
                 <a href={pdfUrl} download='filled-form.pdf'>
-                  Download Filled PDF
+                  {t('downloadPDF')}
                 </a>
               </Button>
               <Button
                 ref={confirmButtonRef}
                 onClick={() => incrementCurrentStep()}
               >
-                Next
+                {t('next')}
               </Button>
             </div>
           </div>

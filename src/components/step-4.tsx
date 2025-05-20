@@ -27,6 +27,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useFormStepper } from '@/hooks/form';
 import { ProvidedTicketsTable } from './provided-tickets-table';
+import { useTranslation } from 'react-i18next';
 
 type Step4Values = z.infer<typeof step4Schema>;
 
@@ -35,6 +36,7 @@ const TICKET_PRICE = 60;
 const MEAL_TICKET_PRICE = 20;
 
 export function Step4() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const { fullTicketCount, mealTicketCount, payrollDeductionAmount, user } =
@@ -242,7 +244,7 @@ export function Step4() {
   return (
     <div className='flex flex-col gap-8 pb-4'>
       <h2 className='text-2xl font-bold text-center'>
-        Section A - from Zachry Corporation
+        {t('section')} A - {t('fromZachryCorp')}
       </h2>
       <ProvidedTicketsTable
         guestTickets={totalGuestTickets}
@@ -250,23 +252,21 @@ export function Step4() {
       />
       <Form {...form}>
         <h2 className='text-2xl font-bold text-center'>
-          Section B - Employee Purchase
+          {t('section')} B - {t('employeePurchase')}
         </h2>
         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
           <Table className='border'>
             <TableHeader className='bg-emerald-200'>
               <TableRow>
-                <TableHead>Type of Ticket</TableHead>
-                <TableHead>Quantity</TableHead>
-                <TableHead>Price</TableHead>
-                <TableHead className='text-right'>Amount Due</TableHead>
+                <TableHead>{t('typeOfTicket')}</TableHead>
+                <TableHead>{t('quantity')}</TableHead>
+                <TableHead>{t('price')}</TableHead>
+                <TableHead className='text-right'>{t('amountDue')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               <TableRow>
-                <TableCell>
-                  Full Ticket (park admission + meal ticket)
-                </TableCell>
+                <TableCell>{t('fullTicket')}</TableCell>
                 <TableCell>{fullTicketCount}</TableCell>
                 <TableCell>${TICKET_PRICE}</TableCell>
                 <TableCell className='text-right'>
@@ -274,7 +274,7 @@ export function Step4() {
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableCell>Meal Ticket (for season pass holders)</TableCell>
+                <TableCell>{t('mealTicket')}</TableCell>
                 <TableCell>{mealTicketCount}</TableCell>
                 <TableCell>${MEAL_TICKET_PRICE}</TableCell>
                 <TableCell className='text-right'>
@@ -285,7 +285,7 @@ export function Step4() {
             <TableFooter>
               <TableRow>
                 <TableCell className='font-bold bg-emerald-200'>
-                  Total Purchased by Employee
+                  {t('totalPurchasedByEmployee')}
                 </TableCell>
                 <TableCell></TableCell>
                 <TableCell></TableCell>
@@ -296,12 +296,12 @@ export function Step4() {
             </TableFooter>
           </Table>
 
-          <h2 className='text-2xl font-bold text-center'>Section C</h2>
+          <h2 className='text-2xl font-bold text-center'>{t('section')} C</h2>
           <Table className='border'>
             <TableBody>
               <TableRow>
                 <TableCell className='bg-blue-200'>
-                  Number of Tickets Purchased by Zachry (from Section A above)
+                  {t('numberOfTicketsPurchasedByZachry')}
                 </TableCell>
                 <TableCell className='text-right'>
                   {totalGuestTickets + totalChildrenTickets + 1}
@@ -309,7 +309,7 @@ export function Step4() {
               </TableRow>
               <TableRow>
                 <TableCell className='bg-emerald-200'>
-                  Number of Tickets purchased by Employee (from Section B above)
+                  {t('numberOfTicketsPurchasedByEmployee')}
                 </TableCell>
                 <TableCell className='text-right'>
                   {fullTicketCount + mealTicketCount}
@@ -317,7 +317,7 @@ export function Step4() {
               </TableRow>
               <TableRow>
                 <TableCell className='font-bold'>
-                  Total Number of Tickets Ordered
+                  {t('totalNumberOfTicketsOrdered')}
                 </TableCell>
                 <TableCell className='text-right'>
                   {totalGuestTickets +
@@ -334,26 +334,26 @@ export function Step4() {
             name='email'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>{t('email')}</FormLabel>
                 <FormControl>
                   <Input
                     className='w-96'
-                    placeholder='Enter your email'
+                    placeholder={t('email')}
                     type='email'
                     {...field}
                   />
                 </FormControl>
                 <FormDescription>
-                  Enter your email to recieve a copy of this order
+                  {t('enterYourEmailToRecieveACopyOfThisOrder')}
                 </FormDescription>
               </FormItem>
             )}
           />
           <div className='flex justify-end gap-2'>
             <Button type='button' variant='outline' onClick={handlePrint}>
-              Print
+              {t('print')}
             </Button>
-            <Button type='submit'>Submit</Button>
+            <Button type='submit'>{t('submit')}</Button>
           </div>
         </form>
       </Form>
