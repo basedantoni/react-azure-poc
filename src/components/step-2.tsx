@@ -20,8 +20,13 @@ import { z } from 'zod';
 type Step2Values = z.infer<typeof step2Schema>;
 
 export function Step2() {
-  const { incrementCurrentStep, setIncludePayrollDeduction, user, setUser } =
-    useFormStepper();
+  const {
+    incrementCurrentStep,
+    setIncludePayrollDeduction,
+    user,
+    setUser,
+    park,
+  } = useFormStepper();
 
   const [showChildrenVerification, setShowChildrenVerification] =
     useState(true);
@@ -36,21 +41,27 @@ export function Step2() {
       location: user?.jobNumber, // TODO: add location to user table
       employeeTickets: 0,
       guestTickets: user?.guest ? 1 : 0,
-      childrenTickets: 0,
-      additionalChildren: '',
+      childrenTickets: user?.children,
     },
   });
 
   const handleSubmit = () => {
+    console.log(form.getValues('childrenTickets'));
     setUser({
       ...user,
       guest: form.getValues('guestTickets') > 0,
+      children: form.getValues('childrenTickets'),
     });
     setIncludePayrollDeduction(false);
     incrementCurrentStep();
   };
 
   const handlePurchaseTickets = () => {
+    setUser({
+      ...user,
+      guest: form.getValues('guestTickets') > 0,
+      children: form.getValues('childrenTickets'),
+    });
     setIncludePayrollDeduction(true);
     incrementCurrentStep();
   };
@@ -118,9 +129,9 @@ export function Step2() {
               Tickets Provided by Zachry Corp
             </h2>
             <p className='text-sm text-muted-foreground'>
-              Zachry Corporation will provide Six Flags Fiesta Texas tickets for
-              you and your <span className='font-semibold'>immediate</span>{' '}
-              family at no charge to you.
+              Zachry Corporation will provide {park} tickets for you and your{' '}
+              <span className='font-semibold'>immediate</span> family at no
+              charge to you.
             </p>
           </div>
 

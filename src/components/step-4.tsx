@@ -70,57 +70,148 @@ export function Step4() {
       });
     };
 
+    // Helper function to draw a table
+    const drawTable = (
+      startX: number,
+      startY: number,
+      rows: string[][],
+      columnWidths: number[],
+      headerBgColor = rgb(0.9, 0.9, 0.9)
+    ) => {
+      const cellHeight = lineHeight * 1.5;
+      const tableWidth = columnWidths.reduce((a, b) => a + b, 0);
+
+      // Draw header background
+      page.drawRectangle({
+        x: startX,
+        y: startY - cellHeight,
+        width: tableWidth,
+        height: cellHeight,
+        color: headerBgColor,
+      });
+
+      // Draw cells
+      let currentX = startX;
+      rows.forEach((row, rowIndex) => {
+        row.forEach((cell, colIndex) => {
+          // Draw cell text
+          addText(cell, currentX + 5, startY - (rowIndex + 1) * cellHeight + 5);
+          currentX += columnWidths[colIndex];
+        });
+        currentX = startX;
+      });
+
+      // Draw borders
+      currentX = startX;
+      for (let i = 0; i <= rows.length; i++) {
+        // Horizontal lines
+        page.drawLine({
+          start: { x: startX, y: startY - i * cellHeight },
+          end: { x: startX + tableWidth, y: startY - i * cellHeight },
+          color: rgb(0, 0, 0),
+          thickness: 0.5,
+        });
+      }
+      for (let i = 0; i <= columnWidths.length; i++) {
+        // Vertical lines
+        page.drawLine({
+          start: { x: currentX, y: startY },
+          end: { x: currentX, y: startY - rows.length * cellHeight },
+          color: rgb(0, 0, 0),
+          thickness: 0.5,
+        });
+        currentX += columnWidths[i];
+      }
+
+      return rows.length * cellHeight;
+    };
+
     // Add title
     addText('Order Summary', width / 2 - 50, y, { size: 20 });
-    y -= lineHeight * 2;
+    y -= lineHeight * 3;
 
     // Section A
     addText('Section A - from Zachry Corporation', 50, y, { size: 16 });
-    y -= lineHeight * 1.5;
-    addText(`Employee Tickets: 1`, 50, y);
-    y -= lineHeight;
-    addText(`Guest Tickets: ${totalGuestTickets}`, 50, y);
-    y -= lineHeight;
-    addText(`Children Tickets: ${totalChildrenTickets}`, 50, y);
     y -= lineHeight * 2;
+
+    // Section A Table
+    const sectionATable = [
+      ['Type of Ticket', 'Quantity'],
+      ['Employee Tickets', '1'],
+      ['Guest Tickets', totalGuestTickets.toString()],
+      ['Children Tickets', totalChildrenTickets.toString()],
+    ];
+    const sectionAHeight = drawTable(
+      50,
+      y,
+      sectionATable,
+      [300, 100],
+      rgb(0.8, 0.9, 0.8)
+    );
+    y -= sectionAHeight + lineHeight * 2;
 
     // Section B
     addText('Section B - Employee Purchase', 50, y, { size: 16 });
-    y -= lineHeight * 1.5;
-    addText(
-      `Full Tickets: ${fullTicketCount} x $${TICKET_PRICE} = $${fullTicketCount * TICKET_PRICE}`,
-      50,
-      y
-    );
-    y -= lineHeight;
-    addText(
-      `Meal Tickets: ${mealTicketCount} x $${MEAL_TICKET_PRICE} = $${mealTicketCount * MEAL_TICKET_PRICE}`,
-      50,
-      y
-    );
-    y -= lineHeight;
-    addText(`Total Purchased by Employee: $${payrollDeductionAmount}`, 50, y);
     y -= lineHeight * 2;
+
+    // Section B Table
+    const sectionBTable = [
+      ['Type of Ticket', 'Quantity', 'Price', 'Amount Due'],
+      [
+        'Full Ticket (meal ticket included)',
+        fullTicketCount.toString(),
+        `$${TICKET_PRICE}`,
+        `$${fullTicketCount * TICKET_PRICE}`,
+      ],
+      [
+        'Meal Ticket (for season pass holders)',
+        mealTicketCount.toString(),
+        `$${MEAL_TICKET_PRICE}`,
+        `$${mealTicketCount * MEAL_TICKET_PRICE}`,
+      ],
+      ['Total Purchased by Employee', '', '', `$${payrollDeductionAmount}`],
+    ];
+    const sectionBHeight = drawTable(
+      50,
+      y,
+      sectionBTable,
+      [200, 80, 80, 100],
+      rgb(0.8, 0.9, 0.8)
+    );
+    y -= sectionBHeight + lineHeight * 2;
 
     // Section C
     addText('Section C', 50, y, { size: 16 });
-    y -= lineHeight * 1.5;
-    addText(
-      `Tickets Purchased by Zachry: ${totalGuestTickets + totalChildrenTickets + 1}`,
+    y -= lineHeight * 2;
+
+    // Section C Table
+    const sectionCTable = [
+      ['Description', 'Count'],
+      [
+        'Number of Tickets Purchased by Zachry',
+        (totalGuestTickets + totalChildrenTickets + 1).toString(),
+      ],
+      [
+        'Number of Tickets purchased by Employee',
+        (fullTicketCount + mealTicketCount).toString(),
+      ],
+      [
+        'Total Number of Tickets Ordered',
+        (
+          totalGuestTickets +
+          totalChildrenTickets +
+          1 +
+          fullTicketCount +
+          mealTicketCount
+        ).toString(),
+      ],
+    ];
+    const sectionCHeight = drawTable(
       50,
-      y
-    );
-    y -= lineHeight;
-    addText(
-      `Tickets Purchased by Employee: ${fullTicketCount + mealTicketCount}`,
-      50,
-      y
-    );
-    y -= lineHeight;
-    addText(
-      `Total Number of Tickets Ordered: ${totalGuestTickets + totalChildrenTickets + 1 + fullTicketCount + mealTicketCount}`,
-      50,
-      y
+      y,
+      sectionCTable,
+      [400, 100],
+      rgb(0.8, 0.9, 0.8)
     );
 
     // Save the PDF
@@ -173,7 +264,9 @@ export function Step4() {
             </TableHeader>
             <TableBody>
               <TableRow>
-                <TableCell>Full Ticket (meal ticket included)</TableCell>
+                <TableCell>
+                  Full Ticket (park admission + meal ticket)
+                </TableCell>
                 <TableCell>{fullTicketCount}</TableCell>
                 <TableCell>${TICKET_PRICE}</TableCell>
                 <TableCell className='text-right'>
@@ -207,7 +300,7 @@ export function Step4() {
           <Table className='border'>
             <TableBody>
               <TableRow>
-                <TableCell className='bg-blue-300'>
+                <TableCell className='bg-blue-200'>
                   Number of Tickets Purchased by Zachry (from Section A above)
                 </TableCell>
                 <TableCell className='text-right'>

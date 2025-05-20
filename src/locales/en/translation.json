@@ -5,5 +5,22 @@
   "payrollDeduction": "Payroll Deduction Form",
   "orderSummary": "Order Summary",
   "welcomeDescription": "Deadline to order tickets is September 15th",
-  "purchaseAdditionalTicketsDescription": "Additional Tickets Order for Extended Family Members"
+  "purchaseAdditionalTicketsDescription": "Additional Tickets Order for Extended Family Members",
+  "next": "Next",
+  "back": "Back",
+  "userNotFound": "User not found",
+  "invalidCredentials": "Invalid credentials",
+  "authenticationFailed": "Authentication failed",
+  "lastName": "Last Name",
+  "ein": "EIN",
+  "jobNumber": "Job Number",
+  "location": "Location",
+  "employee": "Employee",
+  "guest": "Guest",
+  "spouse": "Spouse",
+  "children": "Children",
+  "park": "Park",
+  "employeeTickets": "Employee Tickets",
+  "guestTickets": "Guest Tickets",
+  "childrenTickets": "Children Tickets"
 }

@@ -35,6 +35,7 @@ export function Step3() {
     setMealTicketCount,
     user,
   } = useFormStepper();
+  console.log(user);
 
   const totalGuestTickets = user.guest ? 1 : 0;
   const totalChildrenTickets = user.children ? user.children : 0;
@@ -80,7 +81,9 @@ export function Step3() {
             </TableHeader>
             <TableBody>
               <TableRow>
-                <TableCell>Full Ticket (meal ticket included)</TableCell>
+                <TableCell>
+                  Full Ticket (park admission + meal ticket)
+                </TableCell>
                 <TableCell>
                   <FormField
                     control={form.control}

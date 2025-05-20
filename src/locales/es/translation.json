@@ -5,5 +5,22 @@
   "payrollDeduction": "Formulario de deducción de nómina",
   "orderSummary": "Resumen de la orden",
   "welcomeDescription": "La fecha límite para ordenar entradas es el 15 de septiembre",
-  "purchaseAdditionalTicketsDescription": "Ordenar entradas adicionales para miembros de la familia extendida"
+  "purchaseAdditionalTicketsDescription": "Ordenar entradas adicionales para miembros de la familia extendida",
+  "next": "Siguiente",
+  "back": "Atrás",
+  "userNotFound": "Usuario no encontrado",
+  "invalidCredentials": "Credenciales inválidas",
+  "authenticationFailed": "Error de autenticación",
+  "lastName": "Apellido",
+  "ein": "EIN",
+  "jobNumber": "Número de trabajo",
+  "location": "Ubicación",
+  "employee": "Empleado",
+  "guest": "Invitado",
+  "spouse": "Cónyuge",
+  "children": "Hijos",
+  "park": "Parque",
+  "employeeTickets": "Entradas de empleado",
+  "guestTickets": "Entradas de invitado",
+  "childrenTickets": "Entradas de hijos"
 }

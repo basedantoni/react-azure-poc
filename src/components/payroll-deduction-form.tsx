@@ -301,7 +301,7 @@ export default function PayrollDeductionForm() {
                 ref={confirmButtonRef}
                 onClick={() => incrementCurrentStep()}
               >
-                Confirm
+                Next
               </Button>
             </div>
           </div>

@@ -12,7 +12,10 @@ export function LanguageToggle() {
   return (
     <>
       <div className='flex items-center gap-2'>
-        <Switch onCheckedChange={handleLanguageChange} />
+        <Switch
+          checked={i18n.language === 'es'}
+          onCheckedChange={handleLanguageChange}
+        />
         <Label>Español</Label>
       </div>
     </>

@@ -18,12 +18,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { authenticateUser } from '@/api/users';
+import { useTranslation } from 'react-i18next';
 
 type Step1Values = z.infer<typeof step1Schema>;
 
 export function Step1() {
   const { incrementCurrentStep, setUser, setPark } = useFormStepper();
   const [authError, setAuthError] = useState('');
+  const { t } = useTranslation();
 
   const form = useForm<Step1Values>({
     resolver: zodResolver(step1Schema),
@@ -40,14 +42,14 @@ export function Step1() {
       const result = await authenticateUser(values.ein, values.lastName);
 
       if (result.message === 'User not found') {
-        setAuthError('User not found');
+        setAuthError(t('userNotFound'));
         form.setError('ein', {
           type: 'manual',
-          message: 'Invalid credentials',
+          message: t('invalidCredentials'),
         });
         form.setError('lastName', {
           type: 'manual',
-          message: 'Invalid credentials',
+          message: t('invalidCredentials'),
         });
         return;
       }
@@ -60,11 +62,14 @@ export function Step1() {
         incrementCurrentStep();
       }
     } catch (error) {
-      setAuthError('Authentication failed');
-      form.setError('ein', { type: 'manual', message: 'Invalid credentials' });
+      setAuthError(t('authenticationFailed'));
+      form.setError('ein', {
+        type: 'manual',
+        message: t('invalidCredentials'),
+      });
       form.setError('lastName', {
         type: 'manual',
-        message: 'Invalid credentials',
+        message: t('invalidCredentials'),
       });
       console.error('Authentication failed:', error);
     }
@@ -98,11 +103,11 @@ export function Step1() {
           name='lastName'
           render={({ field }) => (
             <FormItem>
-              <FormLabel required>Last Name</FormLabel>
+              <FormLabel required>{t('lastName')}</FormLabel>
               <FormControl>
                 <Input
                   {...field}
-                  placeholder='Last Name'
+                  placeholder={t('lastName')}
                   onChangeCapture={() => setAuthError('')}
                 />
               </FormControl>
@@ -115,7 +120,7 @@ export function Step1() {
           name='park'
           render={({ field }) => (
             <FormItem>
-              <FormLabel required>Park</FormLabel>
+              <FormLabel required>{t('park')}</FormLabel>
               <FormControl>
                 <RadioGroup
                   className='flex flex-row justify-between'
@@ -169,7 +174,7 @@ export function Step1() {
         />
         <div className='flex justify-end gap-2'>
           <Button className='cursor-pointer' type='submit'>
-            Next
+            {t('next')}
           </Button>
         </div>
       </form>
