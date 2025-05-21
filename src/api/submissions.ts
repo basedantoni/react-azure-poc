@@ -11,7 +11,6 @@ export const getSubmissions = async () => {
 };
 
 export const createSubmission = async (data: any) => {
-  console.log(data);
   try {
     const response = await fetch(`${baseUrl}/submissions`, {
       method: 'POST',

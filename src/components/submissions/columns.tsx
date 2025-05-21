@@ -1,43 +1,54 @@
+import { DataTableColumnHeader } from '../data-table/column-header';
 import { ColumnDef } from '@tanstack/react-table';
 import { Submission } from '@/types';
 import { format } from 'date-fns';
 import { Button } from '../ui/button';
-import { EyeIcon } from 'lucide-react';
+import { PencilIcon } from 'lucide-react';
 
 export const columns: ColumnDef<Submission>[] = [
   {
-    header: 'Park',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Park' />
+    ),
     accessorKey: 'park',
   },
   {
-    header: 'Full Ticket',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Full Ticket' />
+    ),
     accessorKey: 'fullTicket',
   },
   {
-    header: 'Meal Ticket',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Meal Ticket' />
+    ),
     accessorKey: 'mealTicket',
   },
   {
-    header: 'Created At',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Created At' />
+    ),
     accessorKey: 'createdAt',
     cell: ({ row }) => {
       return format(new Date(row.original.createdAt || ''), 'MM/dd hh:mm');
     },
   },
   {
-    header: 'Updated At',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Updated At' />
+    ),
     accessorKey: 'updatedAt',
     cell: ({ row }) => {
       return format(new Date(row.original.updatedAt || ''), 'MM/dd hh:mm');
     },
   },
   {
-    header: 'View',
-    accessorKey: 'view',
+    header: 'Edit',
+    accessorKey: 'edit',
     cell: () => {
       return (
         <Button size='icon' variant='ghost'>
-          <EyeIcon className='w-4 h-4' />
+          <PencilIcon className='w-4 h-4' />
         </Button>
       );
     },
