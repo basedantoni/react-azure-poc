@@ -8,7 +8,10 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  Row,
 } from '@tanstack/react-table';
+import { mkConfig, generateCsv, download } from 'export-to-csv';
+import { Submission } from '@/types';
 
 import {
   Table,
@@ -20,13 +23,14 @@ import {
 } from '../ui/table';
 import { DataTablePagination } from '../data-table/pagination';
 import { Input } from '../ui/input';
+import { Button } from '../ui/button';
 
-interface DataTableProps<TData, TValue> {
+interface DataTableProps<TData extends Submission, TValue> {
   data: TData[];
   columns: ColumnDef<TData, TValue>[];
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends Submission, TValue>({
   data,
   columns,
 }: DataTableProps<TData, TValue>) {
@@ -49,15 +53,34 @@ export function DataTable<TData, TValue>({
     onGlobalFilterChange: setGlobalFilter,
   });
 
+  const today = new Date().toISOString().split('T')[0];
+  const csvConfig = mkConfig({
+    fieldSeparator: ',',
+    filename: `submissions-${today}`,
+    decimalSeparator: '.',
+    useKeysAsHeaders: true,
+  });
+
+  const exportExcel = (rows: Row<Submission>[]) => {
+    const rowData = rows.map((row) => ({
+      ...row.original,
+      user: row.original.user?.ein || '',
+    }));
+    const csv = generateCsv(csvConfig)(rowData);
+    download(csvConfig)(csv);
+  };
   return (
     <div>
-      <div className='flex items-center py-4'>
+      <div className='flex justify-between items-center py-4'>
         <Input
           placeholder='Search...'
           value={globalFilter}
           onChange={(e) => table.setGlobalFilter(String(e.target.value))}
           className='max-w-sm'
         />
+        <Button onClick={() => exportExcel(table.getFilteredRowModel().rows)}>
+          Generate Report
+        </Button>
       </div>
       <div className='rounded-md border'>
         <Table>

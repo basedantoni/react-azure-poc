@@ -2,7 +2,6 @@ import { useQuery } from '@tanstack/react-query';
 import { DataTable } from './data-table';
 import { columns } from './columns';
 import { getSubmissions } from '@/api/submissions';
-import { Button } from '../ui/button';
 
 export function SubmissionTable() {
   const { isPending, data, error } = useQuery({
@@ -13,12 +12,5 @@ export function SubmissionTable() {
   if (isPending) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
-  return (
-    <>
-      <DataTable data={data} columns={columns} />
-      <div className='flex justify-end'>
-        <Button>Generate Report</Button>
-      </div>
-    </>
-  );
+  return <DataTable data={data} columns={columns} />;
 }
