@@ -38,7 +38,6 @@ export function Step3() {
     setMealTicketCount,
     user,
   } = useFormStepper();
-  console.log(user);
 
   const totalGuestTickets = user.guest ? 1 : 0;
   const totalChildrenTickets = user.children ? user.children : 0;

@@ -28,6 +28,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useFormStepper } from '@/hooks/form';
 import { ProvidedTicketsTable } from './provided-tickets-table';
 import { useTranslation } from 'react-i18next';
+import { useMutation } from '@tanstack/react-query';
+import { createSubmission } from '@/api/submissions';
 
 type Step4Values = z.infer<typeof step4Schema>;
 
@@ -39,8 +41,14 @@ export function Step4() {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const { fullTicketCount, mealTicketCount, payrollDeductionAmount, user } =
-    useFormStepper();
+  const {
+    fullTicketCount,
+    mealTicketCount,
+    payrollDeductionAmount,
+    user,
+    park,
+    deductionPeriod,
+  } = useFormStepper();
 
   const totalGuestTickets = user.guest ? 1 : 0;
   const totalChildrenTickets = user.children ? user.children : 0;
@@ -230,7 +238,21 @@ export function Step4() {
     }
   };
 
+  const { mutate } = useMutation({
+    mutationFn: createSubmission,
+  });
+
   const onSubmit = (data: Step4Values) => {
+    mutate({
+      userId: user.id,
+      park,
+      fullTicket: fullTicketCount,
+      mealTicket: mealTicketCount,
+      childrenVerification: !!user.children,
+      payrollDeduction: !!payrollDeductionAmount,
+      deductionPeriod,
+    });
+
     if (data.email && data.email.trim() !== '') {
       sendEmail(
         data.email,
