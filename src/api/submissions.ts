@@ -2,7 +2,7 @@ import { baseUrl } from '.';
 
 export const getSubmissions = async () => {
   try {
-    const response = await fetch(`${baseUrl}/submissions`);
+    const response = await fetch(`${baseUrl}/submissions?include=user`);
     return await response.json();
   } catch (error) {
     console.error('Error fetching submissions:', error);
@@ -22,6 +22,23 @@ export const createSubmission = async (data: any) => {
     return await response.json();
   } catch (error) {
     console.error('Error creating submission:', error);
+    return null;
+  }
+};
+
+export const updateSubmission = async (id: string, data: any) => {
+  try {
+    const response = await fetch(`${baseUrl}/submissions/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    console.log('response', response);
+    return await response.json();
+  } catch (error) {
+    console.error('Error updating submission:', error);
     return null;
   }
 };

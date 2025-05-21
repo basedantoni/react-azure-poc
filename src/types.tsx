@@ -19,7 +19,9 @@ export type Submission = {
   mealTicket: number;
   payrollDeduction: boolean;
   deductionPeriod: number;
+  childrenVerification: boolean;
   createdAt?: string;
   updatedAt?: string;
   userId: string;
+  user: User;
 };

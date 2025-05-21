@@ -1,11 +1,26 @@
-import { DataTableColumnHeader } from '../data-table/column-header';
 import { ColumnDef } from '@tanstack/react-table';
 import { Submission } from '@/types';
 import { format } from 'date-fns';
-import { Button } from '../ui/button';
 import { PencilIcon } from 'lucide-react';
 
+import { DataTableColumnHeader } from '../data-table/column-header';
+import { Button } from '../ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '../ui/dialog';
+import { SubmissionForm } from './form';
+import { useState } from 'react';
 export const columns: ColumnDef<Submission>[] = [
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='User' />
+    ),
+    accessorKey: 'user.ein',
+  },
   {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Park' />
@@ -23,6 +38,12 @@ export const columns: ColumnDef<Submission>[] = [
       <DataTableColumnHeader column={column} title='Meal Ticket' />
     ),
     accessorKey: 'mealTicket',
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Deduction Period' />
+    ),
+    accessorKey: 'deductionPeriod',
   },
   {
     header: ({ column }) => (
@@ -45,11 +66,24 @@ export const columns: ColumnDef<Submission>[] = [
   {
     header: 'Edit',
     accessorKey: 'edit',
-    cell: () => {
+    cell: ({ row }) => {
+      const [open, setOpen] = useState(false);
+      const closeModal = () => setOpen(false);
+
       return (
-        <Button size='icon' variant='ghost'>
-          <PencilIcon className='w-4 h-4' />
-        </Button>
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger asChild>
+            <Button className='cursor-pointer' size='icon' variant='ghost'>
+              <PencilIcon className='w-4 h-4' />
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Edit Submission</DialogTitle>
+            </DialogHeader>
+            <SubmissionForm submission={row.original} closeModal={closeModal} />
+          </DialogContent>
+        </Dialog>
       );
     },
   },
