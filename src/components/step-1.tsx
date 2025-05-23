@@ -145,12 +145,12 @@ export function Step1() {
                       <img
                         className='object-cover'
                         src='/img/six-flags.webp'
-                        alt='Six Flags'
+                        alt='Six Flags Over Texas'
                       />
                     </AspectRatio>
-                    <FormLabel>Six Flags</FormLabel>
+                    <FormLabel>Six Flags Over Texas</FormLabel>
                     <FormControl>
-                      <RadioGroupItem value='Six Flags' />
+                      <RadioGroupItem value='Six Flags Over Texas' />
                     </FormControl>
                   </FormItem>
                   <FormItem className='flex flex-col items-center gap-2'>

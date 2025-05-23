@@ -25,7 +25,7 @@ export type User = z.infer<typeof UserSchema>;
 export const step1Schema = z.object({
   ein: z.string().min(6, { message: 'EIN must be at least 6 digits' }),
   lastName: z.string().min(1, { message: 'Last name is required' }),
-  park: z.enum(['Carowinds', 'Six Flags', 'Fiesta Texas'], {
+  park: z.enum(['Carowinds', 'Six Flags Over Texas', 'Fiesta Texas'], {
     message: 'Invalid park',
   }),
 });

@@ -26,8 +26,8 @@ interface FormStepper {
   payrollDeductionAmount: number;
   setPayrollDeductionAmount: (amount: number) => void;
 
-  deductionPeriod: number;
-  setDeductionPeriod: (period: number) => void;
+  deductionPeriods: number;
+  setDeductionPeriods: (periods: number) => void;
 }
 
 export const useFormStepper = create<FormStepper>()((set) => ({
@@ -65,6 +65,6 @@ export const useFormStepper = create<FormStepper>()((set) => ({
   payrollDeductionAmount: 0,
   setPayrollDeductionAmount: (amount: number) =>
     set({ payrollDeductionAmount: amount }),
-  deductionPeriod: 0,
-  setDeductionPeriod: (period: number) => set({ deductionPeriod: period }),
+  deductionPeriods: 0,
+  setDeductionPeriods: (periods: number) => set({ deductionPeriods: periods }),
 }));

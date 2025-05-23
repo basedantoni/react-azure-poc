@@ -21,7 +21,7 @@ export function SubmissionForm({
       fullTicket: 0,
       mealTicket: 0,
       payrollDeduction: false,
-      deductionPeriod: 0,
+      deductionPeriods: 0,
       childrenVerification: false,
     },
   });
@@ -104,7 +104,7 @@ export function SubmissionForm({
         />
         <FormField
           control={form.control}
-          name='deductionPeriod'
+          name='deductionPeriods'
           render={({ field }) => (
             <FormItem>
               <FormLabel>Deduction Period</FormLabel>

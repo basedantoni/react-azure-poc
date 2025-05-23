@@ -47,7 +47,7 @@ export function Step4() {
     payrollDeductionAmount,
     user,
     park,
-    deductionPeriod,
+    deductionPeriods,
   } = useFormStepper();
 
   const totalGuestTickets = user.guest ? 1 : 0;
@@ -250,7 +250,7 @@ export function Step4() {
       mealTicket: mealTicketCount,
       childrenVerification: !!user.children,
       payrollDeduction: !!payrollDeductionAmount,
-      deductionPeriod,
+      deductionPeriods,
     });
 
     if (data.email && data.email.trim() !== '') {

@@ -15,11 +15,17 @@ export type User = {
 export type Submission = {
   id: string;
   park: string;
+  guest: boolean;
   fullTicket: number;
   mealTicket: number;
+  additionalFullTicket: number;
+  additionalMealTicket: number;
   payrollDeduction: boolean;
-  deductionPeriod: number;
+  deductionPeriods: number;
   childrenVerification: boolean;
+  pendingDependentChildren: number;
+  ticketsToBeDistributed: number;
+  notes: string;
   createdAt?: string;
   updatedAt?: string;
   userId: string;

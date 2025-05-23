@@ -24,6 +24,7 @@ import {
 import { DataTablePagination } from '../data-table/pagination';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
+import { X } from 'lucide-react';
 
 interface DataTableProps<TData extends Submission, TValue> {
   data: TData[];
@@ -69,15 +70,29 @@ export function DataTable<TData extends Submission, TValue>({
     const csv = generateCsv(csvConfig)(rowData);
     download(csvConfig)(csv);
   };
+
+  const clearFilters = () => {
+    setGlobalFilter('');
+    setSorting([]);
+  };
+
   return (
     <div>
-      <div className='flex justify-between items-center py-4'>
-        <Input
-          placeholder='Search...'
-          value={globalFilter}
-          onChange={(e) => table.setGlobalFilter(String(e.target.value))}
-          className='max-w-sm'
-        />
+      <div className='flex flex-col justify-between gap-2 md:flex-row md:items-center py-4'>
+        <div className='flex gap-2'>
+          <Input
+            placeholder='Search...'
+            value={globalFilter}
+            onChange={(e) => table.setGlobalFilter(String(e.target.value))}
+            className='max-w-sm min-w-64'
+          />
+          {(globalFilter || sorting.length > 0) && (
+            <Button variant='outline' onClick={clearFilters}>
+              <X className='w-4 h-4' />
+              Clear Filters
+            </Button>
+          )}
+        </div>
         <Button onClick={() => exportExcel(table.getFilteredRowModel().rows)}>
           Generate Report
         </Button>
