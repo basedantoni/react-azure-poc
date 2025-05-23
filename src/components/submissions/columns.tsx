@@ -1,6 +1,5 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { Submission } from '@/types';
-import { format } from 'date-fns';
 import { PencilIcon, AlertTriangleIcon } from 'lucide-react';
 
 import { DataTableColumnHeader } from '../data-table/column-header';
@@ -54,13 +53,25 @@ export const columns: ColumnDef<Submission>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Job#/Location/Plant' />
     ),
-    accessorKey: 'user.jobNumber',
+    id: 'jobNumber',
+    accessorFn: (row) => row.user?.jobNumber,
+    filterFn: (row, _, value: string[]) => {
+      const jobNumber = row.original.user?.jobNumber;
+
+      return (
+        value.length === 0 || (jobNumber ? value.includes(jobNumber) : false)
+      );
+    },
   },
   {
     header: 'Employee + Guest',
     accessorKey: 'guest',
     cell: ({ row }) => {
       return row.original.guest ? 2 : 1;
+    },
+    filterFn: (row, _, value: boolean | null) => {
+      if (value === null) return true;
+      return row.original.guest === value;
     },
   },
   {
@@ -73,6 +84,13 @@ export const columns: ColumnDef<Submission>[] = [
       return row.original.childrenVerification
         ? row.original.pendingDependentChildren
         : user?.children || 0;
+    },
+    filterFn: (row, _, value: boolean | null) => {
+      if (value === null) return true;
+      const hasChildren = row.original.childrenVerification
+        ? row.original.pendingDependentChildren > 0
+        : (row.original.user?.children || 0) > 0;
+      return hasChildren === value;
     },
   },
   {
@@ -113,12 +131,19 @@ export const columns: ColumnDef<Submission>[] = [
       <DataTableColumnHeader column={column} title='Payroll Deductions' />
     ),
     accessorKey: 'deductionPeriods',
+    filterFn: (row, _, value: boolean | null) => {
+      if (value === null) return true;
+      return row.original.deductionPeriods > 0 === value;
+    },
   },
   {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Park' />
     ),
     accessorKey: 'park',
+    filterFn: (row, _, value: string[]) => {
+      return value.length === 0 || value.includes(row.getValue('park'));
+    },
   },
   {
     header: ({ column }) => (
