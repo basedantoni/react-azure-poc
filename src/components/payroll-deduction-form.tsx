@@ -47,7 +47,7 @@ export default function PayrollDeductionForm() {
     defaultValues: {
       name: `${user?.firstName} ${user?.lastName}`,
       employeeId: user?.ein.toString() ?? '',
-      deptartment: '',
+      department: user?.jobNumber ?? '',
       company: '',
       date: new Date().toLocaleDateString('en-US', {
         month: '2-digit',
@@ -80,7 +80,7 @@ export default function PayrollDeductionForm() {
     // 2. Fill text fields
     pdfForm.getTextField('name').setText(data.name);
     pdfForm.getTextField('employeeId').setText(data.employeeId);
-    pdfForm.getTextField('department').setText(data.deptartment);
+    pdfForm.getTextField('department').setText(data.department);
     pdfForm.getTextField('date').setText(data.date);
     pdfForm.getRadioGroup('company').select(data.company);
     pdfForm.getTextField('amount').setText(data.amount);
@@ -147,7 +147,7 @@ export default function PayrollDeductionForm() {
           />
           <FormField
             control={form.control}
-            name='deptartment'
+            name='department'
             render={({ field }) => (
               <FormItem>
                 <FormLabel required>{t('department')}</FormLabel>

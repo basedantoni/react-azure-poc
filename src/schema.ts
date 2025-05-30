@@ -58,7 +58,7 @@ export type FormValues = z.infer<typeof FormSchema>;
 export const PayrollDeductionFormSchema = z.object({
   name: z.string().min(1),
   employeeId: z.string().min(1),
-  deptartment: z.string().min(1),
+  department: z.string().min(1),
   company: z.string().min(1),
   date: z.string().min(1),
   amount: z.string().min(1),

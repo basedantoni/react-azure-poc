@@ -13,13 +13,16 @@ function RouteComponent() {
       <Link to='/'>
         <img src='/img/zachry-logo.webp' alt='Zachry Logo' />
       </Link>
-      <h1 className='text-2xl font-bold w-96 text-center'>
+      <h1 className='text-2xl font-bold text-center'>
         {t('thankYouForCompletingTheZachryPicnicForm')}
       </h1>
-      <p className='text-sm text-muted-foreground'>
-        {t('yourOrderHasBeenConfirmedAndWillBeProcessedShortly')}
-      </p>
-      <h2 className='text-2xl font-black'>TODO: Add Hotel Information</h2>
+      <h3 className='text-lg text-muted-foreground'>
+        {t('orderConfirmationDescription')}
+      </h3>
+      <p className='font-serif'>{t('correctionsOrRevisions')}</p>
+      <h2 className='text-2xl font-black text-destructive'>
+        TODO: Add Hotel Information
+      </h2>
     </div>
   );
 }
