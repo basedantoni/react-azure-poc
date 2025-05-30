@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { step2Schema } from '@/schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { Textarea } from './ui/textarea';
 
 type Step2Values = z.infer<typeof step2Schema>;
 
@@ -36,6 +37,8 @@ export function Step2() {
     useState(true);
   const [showAdditionalChildInput, setShowAdditionalChildInput] =
     useState(false);
+  const [showAdditionalChildrenTextArea, setShowAdditionalChildrenTextArea] =
+    useState(false);
 
   const form = useForm<Step2Values>({
     resolver: zodResolver(step2Schema),
@@ -46,6 +49,7 @@ export function Step2() {
       employeeTickets: 0,
       guestTickets: user?.guest ? 1 : 0,
       childrenTickets: user?.children,
+      additionalChildrenReason: '',
     },
   });
 
@@ -224,6 +228,7 @@ export function Step2() {
                       onClick={() => {
                         setShowChildrenVerification(false);
                         setShowAdditionalChildInput(true);
+                        setShowAdditionalChildrenTextArea(true);
                       }}
                       variant='ghost'
                       size='sm'
@@ -274,6 +279,21 @@ export function Step2() {
                   </FormItem>
                 )}
               />
+              {showAdditionalChildrenTextArea && (
+                <FormField
+                  control={form.control}
+                  name='additionalChildrenReason'
+                  render={({ field }) => (
+                    <FormItem className='mt-4'>
+                      <FormLabel>Additional Children Reason</FormLabel>
+                      <Textarea
+                        {...field}
+                        placeholder='Reason for additional children'
+                      />
+                    </FormItem>
+                  )}
+                />
+              )}
             </div>
           </div>
         </form>
