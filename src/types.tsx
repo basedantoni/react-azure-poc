@@ -25,6 +25,7 @@ export type Submission = {
   childrenVerification: boolean;
   pendingDependentChildren: number;
   ticketsToBeDistributed: number;
+  ticketNumber: string;
   notes: string;
   createdAt?: string;
   updatedAt?: string;

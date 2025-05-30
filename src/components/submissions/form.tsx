@@ -21,6 +21,7 @@ export function SubmissionForm({
       park: '',
       additionalFullTicket: 0,
       additionalMealTicket: 0,
+      ticketNumber: '',
       payrollDeduction: false,
       deductionPeriods: 0,
       childrenVerification: false,
@@ -91,6 +92,16 @@ export function SubmissionForm({
             <FormItem>
               <FormLabel>Meal Ticket</FormLabel>
               <Input type='number' {...field} />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name='ticketNumber'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Ticket Number</FormLabel>
+              <Input type='text' {...field} />
             </FormItem>
           )}
         />
