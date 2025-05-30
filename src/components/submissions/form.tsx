@@ -3,10 +3,11 @@ import { Input } from '../ui/input';
 import { Form, FormField, FormItem, FormLabel } from '../ui/form';
 import { Submission } from '@/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { updateSubmission } from '@/api/submissions';
+import { deleteSubmission, updateSubmission } from '@/api/submissions';
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { Checkbox } from '../ui/checkbox';
+import { Textarea } from '../ui/textarea';
 
 export function SubmissionForm({
   submission,
@@ -18,16 +19,17 @@ export function SubmissionForm({
   const form = useForm<Submission>({
     defaultValues: submission ?? {
       park: '',
-      fullTicket: 0,
-      mealTicket: 0,
+      additionalFullTicket: 0,
+      additionalMealTicket: 0,
       payrollDeduction: false,
       deductionPeriods: 0,
       childrenVerification: false,
+      notes: '',
     },
   });
 
   const queryClient = useQueryClient();
-  const { mutate } = useMutation({
+  const { mutate: update } = useMutation({
     mutationFn: (data: Submission) => updateSubmission(submission.id, data),
     onSuccess: () => {
       toast.success('Submission updated successfully');
@@ -39,8 +41,24 @@ export function SubmissionForm({
     },
   });
 
+  const { mutate: removeSubmission } = useMutation({
+    mutationFn: () => deleteSubmission(submission.id),
+    onSuccess: () => {
+      toast.success('Submission deleted successfully');
+      queryClient.invalidateQueries({ queryKey: ['submissions'] });
+      if (closeModal) closeModal();
+    },
+    onError: () => {
+      toast.error('Error deleting submission');
+    },
+  });
+
   const handleSubmit = (data: Submission) => {
-    mutate(data);
+    update(data);
+  };
+
+  const handleDelete = () => {
+    removeSubmission();
   };
 
   return (
@@ -58,7 +76,7 @@ export function SubmissionForm({
         />
         <FormField
           control={form.control}
-          name='fullTicket'
+          name='additionalFullTicket'
           render={({ field }) => (
             <FormItem>
               <FormLabel>Full Ticket</FormLabel>
@@ -68,7 +86,7 @@ export function SubmissionForm({
         />
         <FormField
           control={form.control}
-          name='mealTicket'
+          name='additionalMealTicket'
           render={({ field }) => (
             <FormItem>
               <FormLabel>Meal Ticket</FormLabel>
@@ -80,12 +98,12 @@ export function SubmissionForm({
           control={form.control}
           name='childrenVerification'
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Children Verification</FormLabel>
+            <FormItem className='flex flex-row items-center gap-2'>
               <Checkbox
                 checked={field.value}
                 onCheckedChange={field.onChange}
               />
+              <FormLabel>Dependent Children Verification</FormLabel>
             </FormItem>
           )}
         />
@@ -93,12 +111,12 @@ export function SubmissionForm({
           control={form.control}
           name='payrollDeduction'
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Payroll Deduction</FormLabel>
+            <FormItem className='flex flex-row items-center gap-2'>
               <Checkbox
                 checked={field.value}
                 onCheckedChange={field.onChange}
               />
+              <FormLabel>Payroll Deduction</FormLabel>
             </FormItem>
           )}
         />
@@ -112,8 +130,25 @@ export function SubmissionForm({
             </FormItem>
           )}
         />
-        <div className='flex justify-end'>
-          <Button type='submit'>Update</Button>
+        <FormField
+          control={form.control}
+          name='notes'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Notes</FormLabel>
+              <Textarea {...field} />
+            </FormItem>
+          )}
+        />
+        <div className='flex justify-end gap-2'>
+          <div className='flex justify-end'>
+            <Button type='submit'>Update</Button>
+          </div>
+          <div className='flex justify-end'>
+            <Button variant='destructive' type='button' onClick={handleDelete}>
+              Delete
+            </Button>
+          </div>
         </div>
       </form>
     </Form>

@@ -42,3 +42,15 @@ export const updateSubmission = async (id: string, data: any) => {
     return null;
   }
 };
+
+export const deleteSubmission = async (id: string) => {
+  try {
+    const response = await fetch(`${baseUrl}/submissions/${id}`, {
+      method: 'DELETE',
+    });
+    return await response.json();
+  } catch (error) {
+    console.error('Error deleting submission:', error);
+    return null;
+  }
+};

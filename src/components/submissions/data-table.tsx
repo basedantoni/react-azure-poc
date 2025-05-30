@@ -63,6 +63,9 @@ export function DataTable<TData extends Submission, TValue>({
       columnPinning: {
         right: ['edit'],
       },
+      columnVisibility: {
+        childrenVerification: false,
+      },
     },
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -108,12 +111,9 @@ export function DataTable<TData extends Submission, TValue>({
     ?.getFilterValue() as boolean | null;
   const selectedJobNumbers =
     (table.getColumn('jobNumber')?.getFilterValue() as string[]) || [];
-
-  console.log('Job Numbers State:', {
-    selectedJobNumbers,
-    columnFilters,
-    availableJobNumbers,
-  });
+  const hasChildrenVerification = table
+    .getColumn('childrenVerification')
+    ?.getFilterValue() as boolean | null;
 
   return (
     <div>
@@ -150,6 +150,10 @@ export function DataTable<TData extends Submission, TValue>({
               table.getColumn('jobNumber')?.setFilterValue(jobNumbers);
             }}
             availableJobNumbers={availableJobNumbers}
+            hasChildrenVerification={hasChildrenVerification}
+            onChildrenVerificationChange={(value) => {
+              table.getColumn('childrenVerification')?.setFilterValue(value);
+            }}
           />
           {(globalFilter || sorting.length > 0 || columnFilters.length > 0) && (
             <Button variant='outline' size='sm' onClick={clearFilters}>

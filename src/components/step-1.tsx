@@ -40,6 +40,19 @@ export function Step1() {
     try {
       const values = form.getValues();
       const result = await authenticateUser(values.ein, values.lastName);
+      console.log(result);
+
+      if (result.error && result.message === 'Error authenticating user') {
+        form.setError('ein', {
+          type: 'manual',
+          message: t('invalidCredentials'),
+        });
+        form.setError('lastName', {
+          type: 'manual',
+          message: t('invalidCredentials'),
+        });
+        return;
+      }
 
       if (result.message === 'User not found') {
         setAuthError(t('userNotFound'));

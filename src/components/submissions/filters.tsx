@@ -24,6 +24,8 @@ interface FiltersProps {
   selectedJobNumbers: string[];
   onJobNumbersChange: (jobNumbers: string[]) => void;
   availableJobNumbers: string[];
+  hasChildrenVerification: boolean | null;
+  onChildrenVerificationChange: (value: boolean | null) => void;
 }
 
 export function Filters({
@@ -38,6 +40,8 @@ export function Filters({
   selectedJobNumbers,
   onJobNumbersChange,
   availableJobNumbers,
+  hasChildrenVerification,
+  onChildrenVerificationChange,
 }: FiltersProps) {
   const handleParkToggle = (park: string) => {
     if (selectedParks.includes(park)) {
@@ -60,6 +64,9 @@ export function Filters({
     (hasGuest === true || hasGuest === false ? 1 : 0) +
     (hasChildren === true || hasChildren === false ? 1 : 0) +
     (hasPayrollDeduction === true || hasPayrollDeduction === false ? 1 : 0) +
+    (hasChildrenVerification === true || hasChildrenVerification === false
+      ? 1
+      : 0) +
     selectedJobNumbers.length;
 
   return (
@@ -153,6 +160,31 @@ export function Filters({
             }
           >
             Without Payroll Deduction
+          </DropdownMenuCheckboxItem>
+        </DropdownMenuGroup>
+
+        <DropdownMenuSeparator />
+        <DropdownMenuLabel>Children Verification</DropdownMenuLabel>
+        <DropdownMenuGroup>
+          <DropdownMenuCheckboxItem
+            checked={hasChildrenVerification === true}
+            onCheckedChange={() =>
+              onChildrenVerificationChange(
+                hasChildrenVerification === true ? null : true
+              )
+            }
+          >
+            Verified
+          </DropdownMenuCheckboxItem>
+          <DropdownMenuCheckboxItem
+            checked={hasChildrenVerification === false}
+            onCheckedChange={() =>
+              onChildrenVerificationChange(
+                hasChildrenVerification === false ? null : false
+              )
+            }
+          >
+            Not Verified
           </DropdownMenuCheckboxItem>
         </DropdownMenuGroup>
 

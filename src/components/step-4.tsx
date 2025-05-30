@@ -208,12 +208,13 @@ export function Step4() {
       [
         'Total Number of Tickets Ordered',
         (
-          totalGuestTickets +
-          totalChildrenTickets +
-          1 +
-          fullTicketCount +
+          1 + // Employee ticket
+          totalGuestTickets + // Guest ticket
+          totalChildrenTickets + // Children tickets
+          fullTicketCount + // Additional full tickets
           mealTicketCount
-        ).toString(),
+        ) // Additional meal tickets
+          .toString(),
       ],
     ];
     const sectionCHeight = drawTable(
@@ -238,17 +239,35 @@ export function Step4() {
     }
   };
 
-  const { mutate } = useMutation({
+  const { mutate: create } = useMutation({
     mutationFn: createSubmission,
   });
 
   const onSubmit = (data: Step4Values) => {
-    mutate({
+    console.log('data', {
       userId: user.id,
       park,
-      fullTicket: fullTicketCount,
-      mealTicket: mealTicketCount,
+      fullTicket: 1, // Employee's own ticket
+      mealTicket: 1, // Employee's own meal ticket
+      guest: user.guest,
+      additionalFullTicket: fullTicketCount,
+      additionalMealTicket: mealTicketCount,
       childrenVerification: !!user.children,
+      pendingDependentChildren: user.children,
+      payrollDeduction: !!payrollDeductionAmount,
+      deductionPeriods,
+    });
+
+    create({
+      userId: user.id,
+      park,
+      fullTicket: 1, // Employee's own ticket
+      mealTicket: 1, // Employee's own meal ticket
+      guest: user.guest,
+      additionalFullTicket: fullTicketCount,
+      additionalMealTicket: mealTicketCount,
+      childrenVerification: !!user.children,
+      pendingDependentChildren: user.children,
       payrollDeduction: !!payrollDeductionAmount,
       deductionPeriods,
     });
@@ -326,7 +345,7 @@ export function Step4() {
                   {t('numberOfTicketsPurchasedByZachry')}
                 </TableCell>
                 <TableCell className='text-right'>
-                  {totalGuestTickets + totalChildrenTickets + 1}
+                  {1 + totalGuestTickets + totalChildrenTickets}
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -342,11 +361,13 @@ export function Step4() {
                   {t('totalNumberOfTicketsOrdered')}
                 </TableCell>
                 <TableCell className='text-right'>
-                  {totalGuestTickets +
-                    totalChildrenTickets +
-                    1 +
-                    fullTicketCount +
-                    mealTicketCount}
+                  {
+                    1 + // Employee ticket
+                      totalGuestTickets + // Guest ticket
+                      totalChildrenTickets + // Children tickets
+                      fullTicketCount + // Additional full tickets
+                      mealTicketCount // Additional meal tickets
+                  }
                 </TableCell>
               </TableRow>
             </TableBody>
