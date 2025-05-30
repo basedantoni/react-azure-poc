@@ -29,6 +29,7 @@ export function Step2() {
     user,
     setUser,
     park,
+    setChildrenVerification,
   } = useFormStepper();
 
   const [showChildrenVerification, setShowChildrenVerification] =
@@ -210,7 +211,10 @@ export function Step2() {
                   </div>
                   <div className='flex'>
                     <Button
-                      onClick={() => setShowChildrenVerification(false)}
+                      onClick={() => {
+                        setShowChildrenVerification(false);
+                        setChildrenVerification(true);
+                      }}
                       variant='ghost'
                       size='sm'
                     >

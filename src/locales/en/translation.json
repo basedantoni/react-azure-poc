@@ -70,5 +70,6 @@
   "thankYouForCompletingTheZachryPicnicForm": "Thank you for completing the Zachry Picnic Form!",
   "yourOrderHasBeenConfirmedAndWillBeProcessedShortly": "Your order has been confirmed and will be processed shortly.",
   "orderConfirmationDescription": "Paper tickets and Schedule of Events will be sent to your work location.",
-  "correctionsOrRevisions": "Please email placeholder@outlook.com for corrections or revisions"
+  "correctionsOrRevisions": "Please email placeholder@outlook.com for corrections or revisions",
+  "dependentChildrenVerification": "Dependent Children Verification is required for this order"
 }

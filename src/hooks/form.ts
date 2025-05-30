@@ -10,6 +10,9 @@ interface FormStepper {
   includePayrollDeduction: boolean;
   setIncludePayrollDeduction: (include: boolean) => void;
 
+  childrenVerification: boolean;
+  setChildrenVerification: (verification: boolean) => void;
+
   user: User;
   setUser: (user: User) => void;
 
@@ -40,6 +43,9 @@ export const useFormStepper = create<FormStepper>()((set) => ({
   includePayrollDeduction: false,
   setIncludePayrollDeduction: (include: boolean) =>
     set({ includePayrollDeduction: include }),
+  childrenVerification: false,
+  setChildrenVerification: (verification: boolean) =>
+    set({ childrenVerification: verification }),
   park: '',
   setPark: (park: Park) => set({ park }),
   user: {

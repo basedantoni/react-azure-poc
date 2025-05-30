@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
+import { useFormStepper } from '@/hooks/form';
 
 export const Route = createFileRoute('/confirmation')({
   component: RouteComponent,
@@ -7,6 +8,8 @@ export const Route = createFileRoute('/confirmation')({
 
 function RouteComponent() {
   const { t } = useTranslation();
+
+  const { childrenVerification } = useFormStepper();
 
   return (
     <div className='flex flex-col items-center space-y-2 justify-center h-screen'>
@@ -19,7 +22,10 @@ function RouteComponent() {
       <h3 className='text-lg text-muted-foreground'>
         {t('orderConfirmationDescription')}
       </h3>
-      <p className='font-serif'>{t('correctionsOrRevisions')}</p>
+      <p className='text-sm'>{t('correctionsOrRevisions')}</p>
+      {childrenVerification && (
+        <p className='text-sm'>{t('dependentChildrenVerification')}</p>
+      )}
       <h2 className='text-2xl font-black text-destructive'>
         TODO: Add Hotel Information
       </h2>

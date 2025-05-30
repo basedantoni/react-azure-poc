@@ -256,16 +256,35 @@ export function DataTable<TData extends Submission, TValue>({
             <TableFooter>
               {table.getFooterGroups().map((footerGroup) => (
                 <TableRow key={footerGroup.id}>
-                  {footerGroup.headers.map((header) => (
-                    <TableHead key={header.id}>
-                      {header.placeholderId
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.footer,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  ))}
+                  {footerGroup.headers.map((header) => {
+                    const { column } = header;
+                    const isPinned = column.getIsPinned();
+
+                    return (
+                      <TableHead
+                        key={header.id}
+                        className={`
+                        whitespace-nowrap relative
+                        ${
+                          isPinned === 'right'
+                            ? 'sticky right-0 z-10 bg-muted group-hover:bg-muted shadow-lg border-l-2 border-border'
+                            : 'bg-muted group-hover:bg-muted/50'
+                        }
+                      `}
+                        style={{
+                          width: header.getSize(),
+                          minWidth: header.getSize(),
+                        }}
+                      >
+                        {header.placeholderId
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.footer,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    );
+                  })}
                 </TableRow>
               ))}
             </TableFooter>
