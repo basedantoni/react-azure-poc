@@ -16,8 +16,6 @@ export type Submission = {
   id: string;
   park: Park;
   guest: boolean;
-  fullTicket: number;
-  mealTicket: number;
   additionalFullTicket: number;
   additionalMealTicket: number;
   payrollDeduction: boolean;

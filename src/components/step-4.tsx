@@ -247,8 +247,6 @@ export function Step4() {
     create({
       userId: user.id,
       park,
-      fullTicket: 1, // Employee's own ticket
-      mealTicket: 1, // Employee's own meal ticket
       guest: user.guest,
       additionalFullTicket: fullTicketCount,
       additionalMealTicket: mealTicketCount,
