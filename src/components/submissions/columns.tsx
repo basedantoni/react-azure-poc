@@ -21,6 +21,7 @@ export const columns: ColumnDef<Submission>[] = [
       <DataTableColumnHeader column={column} title='First Name' />
     ),
     accessorKey: 'user.firstName',
+    footer: 'Totals',
   },
   {
     header: ({ column }) => (
@@ -120,6 +121,24 @@ export const columns: ColumnDef<Submission>[] = [
       const totalTickets =
         guest + additionalFullTicket + additionalMealTicket + children;
       return totalTickets;
+    },
+    aggregationFn: 'sum',
+    footer: ({ table }) => {
+      const rows = table.getFilteredRowModel().rows;
+
+      const total = rows.reduce((acc, row) => {
+        const guest = row.original.guest ? 2 : 1;
+        const additionalFullTicket = row.original.additionalFullTicket;
+        const additionalMealTicket = row.original.additionalMealTicket;
+        const children = row.original.childrenVerification
+          ? row.original.pendingDependentChildren
+          : row.original.user?.children || 0;
+
+        return (
+          acc + guest + additionalFullTicket + additionalMealTicket + children
+        );
+      }, 0);
+      return total;
     },
   },
   {

@@ -21,6 +21,7 @@ import {
   TableHead,
   TableBody,
   TableCell,
+  TableFooter,
 } from '../ui/table';
 import { DataTablePagination } from '../data-table/pagination';
 import { Input } from '../ui/input';
@@ -252,6 +253,22 @@ export function DataTable<TData extends Submission, TValue>({
                 </TableRow>
               )}
             </TableBody>
+            <TableFooter>
+              {table.getFooterGroups().map((footerGroup) => (
+                <TableRow key={footerGroup.id}>
+                  {footerGroup.headers.map((header) => (
+                    <TableHead key={header.id}>
+                      {header.placeholderId
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.footer,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  ))}
+                </TableRow>
+              ))}
+            </TableFooter>
           </Table>
         </div>
       </div>

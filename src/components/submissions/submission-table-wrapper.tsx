@@ -3,7 +3,7 @@ import { DataTable } from './data-table';
 import { columns } from './columns';
 import { getSubmissions } from '@/api/submissions';
 
-export function SubmissionTable() {
+export function SubmissionTableWrapper() {
   const { isPending, data, error } = useQuery({
     queryKey: ['submissions'],
     queryFn: getSubmissions,
