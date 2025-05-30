@@ -30,12 +30,9 @@ import { ProvidedTicketsTable } from './provided-tickets-table';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
 import { createSubmission } from '@/api/submissions';
+import { getMealTicketPrice, getTicketPrice } from '@/lib/utils';
 
 type Step4Values = z.infer<typeof step4Schema>;
-
-// TODO: get the real prices from the backend
-const TICKET_PRICE = 60;
-const MEAL_TICKET_PRICE = 20;
 
 export function Step4() {
   const { t } = useTranslation();
@@ -49,6 +46,9 @@ export function Step4() {
     park,
     deductionPeriods,
   } = useFormStepper();
+
+  const ticketPrice = getTicketPrice(park) ?? 0;
+  const mealTicketPrice = getMealTicketPrice(park) ?? 0;
 
   const totalGuestTickets = user.guest ? 1 : 0;
   const totalChildrenTickets = user.children ? user.children : 0;
@@ -170,14 +170,14 @@ export function Step4() {
       [
         'Full Ticket (meal ticket included)',
         fullTicketCount.toString(),
-        `$${TICKET_PRICE}`,
-        `$${fullTicketCount * TICKET_PRICE}`,
+        `$${ticketPrice}`,
+        `$${fullTicketCount * ticketPrice}`,
       ],
       [
         'Meal Ticket (for season pass holders)',
         mealTicketCount.toString(),
-        `$${MEAL_TICKET_PRICE}`,
-        `$${mealTicketCount * MEAL_TICKET_PRICE}`,
+        `$${mealTicketPrice}`,
+        `$${mealTicketCount * mealTicketPrice}`,
       ],
       ['Total Purchased by Employee', '', '', `$${payrollDeductionAmount}`],
     ];
@@ -244,20 +244,6 @@ export function Step4() {
   });
 
   const onSubmit = (data: Step4Values) => {
-    console.log('data', {
-      userId: user.id,
-      park,
-      fullTicket: 1, // Employee's own ticket
-      mealTicket: 1, // Employee's own meal ticket
-      guest: user.guest,
-      additionalFullTicket: fullTicketCount,
-      additionalMealTicket: mealTicketCount,
-      childrenVerification: !!user.children,
-      pendingDependentChildren: user.children,
-      payrollDeduction: !!payrollDeductionAmount,
-      deductionPeriods,
-    });
-
     create({
       userId: user.id,
       park,
@@ -309,17 +295,17 @@ export function Step4() {
               <TableRow>
                 <TableCell>{t('fullTicket')}</TableCell>
                 <TableCell>{fullTicketCount}</TableCell>
-                <TableCell>${TICKET_PRICE}</TableCell>
+                <TableCell>${ticketPrice}</TableCell>
                 <TableCell className='text-right'>
-                  ${fullTicketCount * TICKET_PRICE}
+                  ${(fullTicketCount * ticketPrice).toFixed(2)}
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>{t('mealTicket')}</TableCell>
                 <TableCell>{mealTicketCount}</TableCell>
-                <TableCell>${MEAL_TICKET_PRICE}</TableCell>
+                <TableCell>${mealTicketPrice}</TableCell>
                 <TableCell className='text-right'>
-                  ${mealTicketCount * MEAL_TICKET_PRICE}
+                  ${(mealTicketCount * mealTicketPrice).toFixed(2)}
                 </TableCell>
               </TableRow>
             </TableBody>
@@ -331,7 +317,7 @@ export function Step4() {
                 <TableCell></TableCell>
                 <TableCell></TableCell>
                 <TableCell className='text-right'>
-                  ${payrollDeductionAmount}
+                  ${payrollDeductionAmount.toFixed(2)}
                 </TableCell>
               </TableRow>
             </TableFooter>

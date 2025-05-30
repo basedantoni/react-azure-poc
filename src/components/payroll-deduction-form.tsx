@@ -54,7 +54,7 @@ export default function PayrollDeductionForm() {
         day: '2-digit',
         year: 'numeric',
       }),
-      amount: `${payrollDeductionAmount}`,
+      amount: payrollDeductionAmount.toFixed(2),
       payPeriods: '',
       date2: new Date().toLocaleDateString('en-US', {
         month: '2-digit',

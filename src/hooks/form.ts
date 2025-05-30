@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { User } from '@/types';
+import { Park, User } from '@/types';
 
 interface FormStepper {
   currentStep: number;
@@ -13,8 +13,8 @@ interface FormStepper {
   user: User;
   setUser: (user: User) => void;
 
-  park: string;
-  setPark: (park: string) => void;
+  park: Park;
+  setPark: (park: Park) => void;
 
   fullTicketCount: number;
   setFullTicketCount: (count: number) => void;
@@ -41,7 +41,7 @@ export const useFormStepper = create<FormStepper>()((set) => ({
   setIncludePayrollDeduction: (include: boolean) =>
     set({ includePayrollDeduction: include }),
   park: '',
-  setPark: (park: string) => set({ park }),
+  setPark: (park: Park) => set({ park }),
   user: {
     id: '',
     ein: 0,

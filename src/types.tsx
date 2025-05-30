@@ -14,7 +14,7 @@ export type User = {
 
 export type Submission = {
   id: string;
-  park: string;
+  park: Park;
   guest: boolean;
   fullTicket: number;
   mealTicket: number;
@@ -31,3 +31,5 @@ export type Submission = {
   userId: string;
   user: User;
 };
+
+export type Park = 'Carowinds' | 'Six Flags Over Texas' | 'Fiesta Texas' | '';
