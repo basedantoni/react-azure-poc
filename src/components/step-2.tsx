@@ -31,6 +31,7 @@ export function Step2() {
     setUser,
     park,
     setChildrenVerification,
+    setAdditionalChildrenReason,
   } = useFormStepper();
 
   const [showChildrenVerification, setShowChildrenVerification] =
@@ -54,13 +55,13 @@ export function Step2() {
   });
 
   const handleSubmit = () => {
-    console.log(form.getValues('childrenTickets'));
     setUser({
       ...user,
       guest: form.getValues('guestTickets') > 0,
       children: form.getValues('childrenTickets'),
     });
     setIncludePayrollDeduction(false);
+    setAdditionalChildrenReason(form.getValues('additionalChildrenReason'));
     incrementCurrentStep();
   };
 
@@ -71,6 +72,7 @@ export function Step2() {
       children: form.getValues('childrenTickets'),
     });
     setIncludePayrollDeduction(true);
+    setAdditionalChildrenReason(form.getValues('additionalChildrenReason'));
     incrementCurrentStep();
   };
 
@@ -217,7 +219,6 @@ export function Step2() {
                     <Button
                       onClick={() => {
                         setShowChildrenVerification(false);
-                        setChildrenVerification(true);
                       }}
                       variant='ghost'
                       size='sm'
@@ -229,6 +230,7 @@ export function Step2() {
                         setShowChildrenVerification(false);
                         setShowAdditionalChildInput(true);
                         setShowAdditionalChildrenTextArea(true);
+                        setChildrenVerification(true);
                       }}
                       variant='ghost'
                       size='sm'

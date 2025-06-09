@@ -1,6 +1,6 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { Submission } from '@/types';
-import { PencilIcon, AlertTriangleIcon } from 'lucide-react';
+import { PencilIcon, AlertTriangleIcon, CircleAlert } from 'lucide-react';
 
 import { DataTableColumnHeader } from '../data-table/column-header';
 import { Button } from '../ui/button';
@@ -96,14 +96,30 @@ export const columns: ColumnDef<Submission>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Full Tickets to Purchase' />
+      <DataTableColumnHeader
+        column={column}
+        title='Total Full Tickets to Purchase'
+      />
     ),
     accessorKey: 'additionalFullTicket',
     enableResizing: true,
+    cell: ({ row }) => {
+      const guest = row.original.guest ? 2 : 1;
+      const additionalFullTicket = row.original.additionalFullTicket;
+      const children = row.original.childrenVerification
+        ? row.original.pendingDependentChildren
+        : row.original.user?.children || 0;
+
+      const totalTickets = guest + additionalFullTicket + children;
+      return totalTickets;
+    },
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Meal Tickets to Purchase' />
+      <DataTableColumnHeader
+        column={column}
+        title='Total Meal Tickets to Purchase'
+      />
     ),
     accessorKey: 'additionalMealTicket',
     enableResizing: true,
@@ -189,6 +205,33 @@ export const columns: ColumnDef<Submission>[] = [
     },
   },
   {
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title='Additional Children Reason'
+      />
+    ),
+    accessorKey: 'additionalChildrenReason',
+    cell: ({ row }) => {
+      console.log(row.original);
+      if (row.original.additionalChildrenReason.length > 32) {
+        return (
+          <Tooltip>
+            <TooltipTrigger className='w-4' asChild>
+              <span className='truncate'>
+                {row.original.additionalChildrenReason.slice(0, 32)}
+              </span>
+            </TooltipTrigger>
+            <TooltipContent>
+              {row.original.additionalChildrenReason}
+            </TooltipContent>
+          </Tooltip>
+        );
+      }
+      return row.original.additionalChildrenReason || '-';
+    },
+  },
+  {
     header: 'Children Verification',
     accessorKey: 'childrenVerification',
   },
@@ -202,9 +245,22 @@ export const columns: ColumnDef<Submission>[] = [
       return (
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Button className='cursor-pointer' size='icon' variant='ghost'>
-              <PencilIcon className='w-4 h-4' />
-            </Button>
+            <div className='flex items-center gap-2'>
+              <Button className='cursor-pointer' size='icon' variant='ghost'>
+                <PencilIcon className='w-4 h-4' />
+              </Button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  {row.original.childrenVerification &&
+                    !row.original.childrenVerified && (
+                      <CircleAlert className='w-4 h-4 text-destructive' />
+                    )}
+                </TooltipTrigger>
+                <TooltipContent>
+                  Children Verification is required for this order
+                </TooltipContent>
+              </Tooltip>
+            </div>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>

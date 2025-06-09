@@ -45,6 +45,7 @@ export function Step4() {
     user,
     park,
     deductionPeriods,
+    additionalChildrenReason,
   } = useFormStepper();
 
   const ticketPrice = getTicketPrice(park) ?? 0;
@@ -252,6 +253,7 @@ export function Step4() {
       additionalMealTicket: mealTicketCount,
       childrenVerification: !!user.children,
       pendingDependentChildren: user.children,
+      additionalChildrenReason,
       payrollDeduction: !!payrollDeductionAmount,
       deductionPeriods,
     });

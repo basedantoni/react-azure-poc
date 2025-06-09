@@ -13,6 +13,9 @@ interface FormStepper {
   childrenVerification: boolean;
   setChildrenVerification: (verification: boolean) => void;
 
+  additionalChildrenReason: string;
+  setAdditionalChildrenReason: (reason: string) => void;
+
   user: User;
   setUser: (user: User) => void;
 
@@ -40,14 +43,22 @@ export const useFormStepper = create<FormStepper>()((set) => ({
     set((state) => ({ currentStep: state.currentStep + 1 })),
   decrementCurrentStep: () =>
     set((state) => ({ currentStep: state.currentStep - 1 })),
+
   includePayrollDeduction: false,
   setIncludePayrollDeduction: (include: boolean) =>
     set({ includePayrollDeduction: include }),
+
   childrenVerification: false,
   setChildrenVerification: (verification: boolean) =>
     set({ childrenVerification: verification }),
+
+  additionalChildrenReason: '',
+  setAdditionalChildrenReason: (reason: string) =>
+    set({ additionalChildrenReason: reason }),
+
   park: '',
   setPark: (park: Park) => set({ park }),
+
   user: {
     id: '',
     ein: 0,
@@ -61,6 +72,7 @@ export const useFormStepper = create<FormStepper>()((set) => ({
     updatedAt: '',
   },
   setUser: (user: User) => set({ user }),
+
   fullTicketCount: 0,
   setFullTicketCount: (count: number) => set({ fullTicketCount: count }),
   mealTicketCount: 0,
@@ -68,9 +80,11 @@ export const useFormStepper = create<FormStepper>()((set) => ({
   providedTicketCount: 0,
   setProvidedTicketCount: (count: number) =>
     set({ providedTicketCount: count }),
+
   payrollDeductionAmount: 0,
   setPayrollDeductionAmount: (amount: number) =>
     set({ payrollDeductionAmount: amount }),
+
   deductionPeriods: 0,
   setDeductionPeriods: (periods: number) => set({ deductionPeriods: periods }),
 }));

@@ -25,6 +25,7 @@ export function SubmissionForm({
       payrollDeduction: false,
       deductionPeriods: 0,
       childrenVerification: false,
+      childrenVerified: false,
       notes: '',
     },
   });
@@ -107,7 +108,7 @@ export function SubmissionForm({
         />
         <FormField
           control={form.control}
-          name='childrenVerification'
+          name='childrenVerified'
           render={({ field }) => (
             <FormItem className='flex flex-row items-center gap-2'>
               <Checkbox

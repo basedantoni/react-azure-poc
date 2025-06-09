@@ -21,6 +21,8 @@ export type Submission = {
   payrollDeduction: boolean;
   deductionPeriods: number;
   childrenVerification: boolean;
+  additionalChildrenReason: string;
+  childrenVerified: boolean;
   pendingDependentChildren: number;
   ticketsToBeDistributed: number;
   ticketNumber: string;
