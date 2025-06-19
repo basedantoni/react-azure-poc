@@ -218,13 +218,6 @@ export function Step4() {
           .toString(),
       ],
     ];
-    const sectionCHeight = drawTable(
-      50,
-      y,
-      sectionCTable,
-      [400, 100],
-      rgb(0.8, 0.9, 0.8)
-    );
 
     // Save the PDF
     const pdfBytes = await pdfDoc.save();

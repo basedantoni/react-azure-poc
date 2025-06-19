@@ -24,8 +24,8 @@ function RootComponent() {
         <Outlet />
         <Toaster />
       </ThemeProvider>
-      {/* {import.meta.env.DEV && <TanStackRouterDevtools />} */}
-      {/* {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />} */}
+      {import.meta.env.DEV && <TanStackRouterDevtools />}
+      {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
     </QueryClientProvider>
   );
 }
