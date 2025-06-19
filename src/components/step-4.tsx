@@ -191,34 +191,6 @@ export function Step4() {
     );
     y -= sectionBHeight + lineHeight * 2;
 
-    // Section C
-    addText('Section C', 50, y, { size: 16 });
-    y -= lineHeight * 2;
-
-    // Section C Table
-    const sectionCTable = [
-      ['Description', 'Count'],
-      [
-        'Number of Tickets Purchased by Zachry',
-        (totalGuestTickets + totalChildrenTickets + 1).toString(),
-      ],
-      [
-        'Number of Tickets purchased by Employee',
-        (fullTicketCount + mealTicketCount).toString(),
-      ],
-      [
-        'Total Number of Tickets Ordered',
-        (
-          1 + // Employee ticket
-          totalGuestTickets + // Guest ticket
-          totalChildrenTickets + // Children tickets
-          fullTicketCount + // Additional full tickets
-          mealTicketCount
-        ) // Additional meal tickets
-          .toString(),
-      ],
-    ];
-
     // Save the PDF
     const pdfBytes = await pdfDoc.save();
     const blob = new Blob([pdfBytes], { type: 'application/pdf' });
