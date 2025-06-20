@@ -17,6 +17,8 @@ export default defineConfig({
     },
   },
   build: {
+    // Change output directory to 'build' for deployment pipeline compatibility
+    outDir: 'build',
     // Enable source maps for better debugging (optional)
     sourcemap: false,
     // Reduce chunk size warning limit
