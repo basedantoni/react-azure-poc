@@ -1,6 +1,6 @@
 import SignatureCanvas from 'react-signature-canvas';
 import { useState, useEffect, useRef } from 'react';
-import { PDFDocument } from 'pdf-lib';
+import { loadPDFLib } from '@/lib/pdf-utils';
 import { useFormStepper } from '@/hooks/form';
 
 import { Button } from '@/components/ui/button';
@@ -22,6 +22,7 @@ export default function PayrollDeductionForm() {
     const loadPdf = async () => {
       // 1. Load PDF
       const arrayBuffer = await fetch(pdfUrl).then((r) => r.arrayBuffer());
+      const { PDFDocument } = await loadPDFLib();
       const pdfDoc = await PDFDocument.load(arrayBuffer);
       const pdfForm = pdfDoc.getForm();
 
@@ -48,10 +49,9 @@ export default function PayrollDeductionForm() {
   const handleConfirm = async () => {
     // Load PDF
     const arrayBuffer = await fetch(pdfUrl).then((r) => r.arrayBuffer());
+    const { PDFDocument } = await loadPDFLib();
     const pdfDoc = await PDFDocument.load(arrayBuffer);
     const pdfForm = pdfDoc.getForm();
-
-    console.log(pdfForm.getRadioGroup('company').getSelected());
 
     if (sigCanvasRef.current?.isEmpty()) {
       setSignatureError('Please sign the form');

@@ -8,7 +8,7 @@ import {
   Form,
 } from './ui/form';
 import { Input } from './ui/input';
-import { PDFDocument, rgb } from 'pdf-lib';
+import { loadPDFLib } from '@/lib/pdf-utils';
 
 import { sendEmail } from '@/api/email';
 import { useNavigate } from '@tanstack/react-router';
@@ -62,6 +62,9 @@ export function Step4() {
   });
 
   const handlePrint = async () => {
+    // Dynamically load PDF library
+    const { PDFDocument, rgb } = await loadPDFLib();
+
     // Create a new PDF document
     const pdfDoc = await PDFDocument.create();
     const page = pdfDoc.addPage([595.28, 841.89]); // A4 size
@@ -210,7 +213,7 @@ export function Step4() {
   });
 
   const onSubmit = (data: Step4Values) => {
-    create({
+    const submission = create({
       userId: user.id,
       park,
       guest: user.guest,
@@ -222,6 +225,8 @@ export function Step4() {
       payrollDeduction: !!payrollDeductionAmount,
       deductionPeriods,
     });
+
+    console.log('Submission', submission);
 
     if (data.email && data.email.trim() !== '') {
       sendEmail(

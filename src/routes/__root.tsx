@@ -1,9 +1,25 @@
 import { Outlet, createRootRoute } from '@tanstack/react-router';
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
+import { lazy, Suspense } from 'react';
+
+// Lazy load dev tools only in development
+const TanStackRouterDevtools = lazy(() =>
+  import.meta.env.DEV
+    ? import('@tanstack/react-router-devtools').then((module) => ({
+        default: module.TanStackRouterDevtools,
+      }))
+    : Promise.resolve({ default: () => null })
+);
+
+const ReactQueryDevtools = lazy(() =>
+  import.meta.env.DEV
+    ? import('@tanstack/react-query-devtools').then((module) => ({
+        default: module.ReactQueryDevtools,
+      }))
+    : Promise.resolve({ default: () => null })
+);
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,8 +40,12 @@ function RootComponent() {
         <Outlet />
         <Toaster />
       </ThemeProvider>
-      {import.meta.env.DEV && <TanStackRouterDevtools />}
-      {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
+      {import.meta.env.DEV && (
+        <Suspense fallback={null}>
+          <TanStackRouterDevtools />
+          <ReactQueryDevtools initialIsOpen={false} />
+        </Suspense>
+      )}
     </QueryClientProvider>
   );
 }

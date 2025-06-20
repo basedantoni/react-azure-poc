@@ -1,6 +1,6 @@
 import SignatureCanvas from 'react-signature-canvas';
 import { useState, useRef, useEffect } from 'react';
-import { PDFDocument } from 'pdf-lib';
+import { loadPDFLib } from '@/lib/pdf-utils';
 import {
   PayrollDeductionFormValues,
   PayrollDeductionFormSchema,
@@ -74,6 +74,7 @@ export default function PayrollDeductionForm() {
     const arrayBuffer = await fetch('/payroll-deduction-form.pdf').then((r) =>
       r.arrayBuffer()
     );
+    const { PDFDocument } = await loadPDFLib();
     const pdfDoc = await PDFDocument.load(arrayBuffer);
     const pdfForm = pdfDoc.getForm();
 
@@ -89,7 +90,6 @@ export default function PayrollDeductionForm() {
 
     // 3. Capture & embed signature
     if (sigCanvasRef.current?.isEmpty()) {
-      console.log('Signature is empty');
       setSignatureError('Please sign the form');
       return;
     }

@@ -11,6 +11,7 @@ export function SubmissionTableWrapper() {
 
   if (isPending) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
+  if (!data) return <div>No data</div>;
 
   return <DataTable data={data} columns={columns} />;
 }

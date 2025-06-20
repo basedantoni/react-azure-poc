@@ -147,7 +147,6 @@ export function DataTable<TData extends Submission, TValue>({
             }}
             selectedJobNumbers={selectedJobNumbers}
             onJobNumbersChange={(jobNumbers) => {
-              console.log('Setting job numbers filter:', jobNumbers);
               table.getColumn('jobNumber')?.setFilterValue(jobNumbers);
             }}
             availableJobNumbers={availableJobNumbers}

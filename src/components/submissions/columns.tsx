@@ -213,8 +213,10 @@ export const columns: ColumnDef<Submission>[] = [
     ),
     accessorKey: 'additionalChildrenReason',
     cell: ({ row }) => {
-      console.log(row.original);
-      if (row.original.additionalChildrenReason.length > 32) {
+      if (
+        row.original.additionalChildrenReason &&
+        row.original.additionalChildrenReason.length > 32
+      ) {
         return (
           <Tooltip>
             <TooltipTrigger className='w-4' asChild>

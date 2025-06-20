@@ -35,7 +35,6 @@ export const updateSubmission = async (id: string, data: any) => {
         'Content-Type': 'application/json',
       },
     });
-    console.log('response', response);
     return await response.json();
   } catch (error) {
     console.error('Error updating submission:', error);
