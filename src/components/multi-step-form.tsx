@@ -9,8 +9,11 @@ import { Button } from './ui/button';
 import { ArrowLeftIcon } from 'lucide-react';
 import { useFormStepper } from '@/hooks/form';
 import { useTranslation } from 'react-i18next';
-import PayrollDeductionForm from './payroll-deduction-form';
+import { lazy, Suspense } from 'react';
 import { LanguageToggle } from './language-toggle';
+
+// Lazy load PayrollDeductionForm to prevent PDF dependencies from being bundled eagerly
+const PayrollDeductionForm = lazy(() => import('./payroll-deduction-form'));
 
 export function MultiStepForm() {
   const { t } = useTranslation();
@@ -35,7 +38,20 @@ export function MultiStepForm() {
     },
     {
       label: t('payrollDeduction'),
-      component: <PayrollDeductionForm />,
+      component: (
+        <Suspense
+          fallback={
+            <div className='flex items-center justify-center p-8'>
+              <div className='text-center'>
+                <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2'></div>
+                <p className='text-muted-foreground'>Loading form...</p>
+              </div>
+            </div>
+          }
+        >
+          <PayrollDeductionForm />
+        </Suspense>
+      ),
     },
     {
       label: t('orderSummary'),

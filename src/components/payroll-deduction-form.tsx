@@ -1,6 +1,6 @@
 import SignatureCanvas from 'react-signature-canvas';
 import { useState, useRef, useEffect } from 'react';
-import { loadPDFLib } from '@/lib/pdf-utils';
+import { loadPDFLib, createPDFBlobUrl } from '@/lib/pdf-utils';
 import {
   PayrollDeductionFormValues,
   PayrollDeductionFormSchema,
@@ -65,54 +65,83 @@ export default function PayrollDeductionForm() {
   });
 
   const [pdfUrl, setPdfUrl] = useState('');
+  const [pdfCleanup, setPdfCleanup] = useState<(() => void) | null>(null);
   const [signatureError, setSignatureError] = useState('');
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const sigCanvasRef = useRef<SignatureCanvas>(null);
   const confirmButtonRef = useRef<HTMLButtonElement>(null);
 
+  // Cleanup PDF URL when component unmounts or new PDF is generated
+  useEffect(() => {
+    return () => {
+      if (pdfCleanup) {
+        pdfCleanup();
+      }
+    };
+  }, [pdfCleanup]);
+
   const handleSubmit = async (data: PayrollDeductionFormValues) => {
-    // 1. Load PDF
-    const arrayBuffer = await fetch('/payroll-deduction-form.pdf').then((r) =>
-      r.arrayBuffer()
-    );
-    const { PDFDocument } = await loadPDFLib();
-    const pdfDoc = await PDFDocument.load(arrayBuffer);
-    const pdfForm = pdfDoc.getForm();
-
-    // 2. Fill text fields
-    pdfForm.getTextField('name').setText(data.name);
-    pdfForm.getTextField('employeeId').setText(data.employeeId);
-    pdfForm.getTextField('department').setText(data.department);
-    pdfForm.getTextField('date').setText(data.date);
-    pdfForm.getRadioGroup('company').select(data.company);
-    pdfForm.getTextField('amount').setText(data.amount);
-    pdfForm.getTextField('payPeriods').setText(data.payPeriods);
-    pdfForm.getTextField('date2').setText(data.date2);
-
-    // 3. Capture & embed signature
     if (sigCanvasRef.current?.isEmpty()) {
       setSignatureError('Please sign the form');
       return;
     }
 
     setSignatureError('');
-    const dataUrl = sigCanvasRef.current?.toDataURL();
-    if (!dataUrl) return;
-    const imgBytes = await fetch(dataUrl).then((r) => r.arrayBuffer());
-    const pngImage = await pdfDoc.embedPng(imgBytes);
-    pdfForm.getTextField('signature').setImage(pngImage);
+    setIsGeneratingPdf(true);
 
-    // 4. Serialize & blobify
-    const pdfBytes = await pdfDoc.save();
-    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-    const url = URL.createObjectURL(blob);
-    setPdfUrl(url);
-
-    // Timeout to allow the PDF to load
-    setTimeout(() => {
-      if (confirmButtonRef.current) {
-        confirmButtonRef.current.scrollIntoView({ behavior: 'smooth' });
+    try {
+      // Cleanup previous PDF URL if exists
+      if (pdfCleanup) {
+        pdfCleanup();
+        setPdfCleanup(null);
       }
-    }, 100);
+
+      // 1. Load PDF
+      const arrayBuffer = await fetch('/payroll-deduction-form.pdf').then((r) =>
+        r.arrayBuffer()
+      );
+      const { PDFDocument } = await loadPDFLib();
+      const pdfDoc = await PDFDocument.load(arrayBuffer);
+      const pdfForm = pdfDoc.getForm();
+
+      // 2. Fill text fields
+      pdfForm.getTextField('name').setText(data.name);
+      pdfForm.getTextField('employeeId').setText(data.employeeId);
+      pdfForm.getTextField('department').setText(data.department);
+      pdfForm.getTextField('date').setText(data.date);
+      pdfForm.getRadioGroup('company').select(data.company);
+      pdfForm.getTextField('amount').setText(data.amount);
+      pdfForm.getTextField('payPeriods').setText(data.payPeriods);
+      pdfForm.getTextField('date2').setText(data.date2);
+
+      // 3. Capture & embed signature
+      const dataUrl = sigCanvasRef.current?.toDataURL();
+      if (!dataUrl) {
+        throw new Error('Failed to capture signature');
+      }
+      const imgBytes = await fetch(dataUrl).then((r) => r.arrayBuffer());
+      const pngImage = await pdfDoc.embedPng(imgBytes);
+      pdfForm.getTextField('signature').setImage(pngImage);
+
+      // 4. Generate PDF and create blob URL
+      const pdfBytes = await pdfDoc.save();
+      const { url, cleanup } = createPDFBlobUrl(pdfBytes);
+
+      setPdfUrl(url);
+      setPdfCleanup(() => cleanup);
+
+      // Timeout to allow the PDF to load
+      setTimeout(() => {
+        if (confirmButtonRef.current) {
+          confirmButtonRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      setSignatureError('Failed to generate PDF. Please try again.');
+    } finally {
+      setIsGeneratingPdf(false);
+    }
   };
 
   return (
@@ -261,10 +290,20 @@ export default function PayrollDeductionForm() {
               type='button'
               onClick={() => sigCanvasRef.current?.clear()}
               variant='outline'
+              disabled={isGeneratingPdf}
             >
               {t('clearSignature')}
             </Button>
-            <Button type='submit'>{t('next')}</Button>
+            <Button type='submit' disabled={isGeneratingPdf}>
+              {isGeneratingPdf ? (
+                <>
+                  <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2'></div>
+                  Generating PDF...
+                </>
+              ) : (
+                t('next')
+              )}
+            </Button>
           </div>
         </form>
 
